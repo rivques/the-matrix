@@ -78,3 +78,4 @@ start time: 11pm
 ok i'm going to start on the pcb layout. I'm not ghoing to try to do routing tonight, but i do want to at least get the rough positions of things figured out.
 
 ok, i'm about 30 mins in, and its becoming clear that i have to rotate the top and bottom rows of displays 90 degrees so i can fit the row connectors in. this will cause some headaches when doing the firmware, but i don't think i have a choice. this is what it's looking like now:
+![image](https://github.com/user-attachments/assets/264028eb-a2ef-4b61-ad5d-3660abba76a9)
