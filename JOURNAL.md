@@ -103,6 +103,6 @@ so i've gotten the middle rows and the rght column and a half routed. it's diffi
 [another hour later]
 Ok, i have all of the matrices routed, using just the internal layers. I haven't routed the connectors or drivers yet, but hopefully the outer layers are enough room for that. here's what it looks like now:
 
-
+![image](https://github.com/user-attachments/assets/cb18ec98-480b-40fe-80e5-c5641aa0dc52)
 
 ** total time spent: 2 hours**
