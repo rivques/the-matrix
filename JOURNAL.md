@@ -58,7 +58,7 @@ unit joints
 
 **total time spent (estimate): 2.5 hours**: 
 
-# Mat 27th, part 2:
+# May 27th, part 2:
 OK i'm going to sit down and try to work out a schematic. I also realized that I needed to switch to a P-channel MOSFET for the high side, which I changed in the BOM.
 
 [much later]
@@ -67,7 +67,14 @@ ok so there's a schematic now. i decided im not going to have a separate PCB for
 
 ## screenshots
 ![image](https://github.com/user-attachments/assets/da3e68c8-1c97-4b34-9f4b-f0a703996c76)
-## close-up one one matrix and drivers
+## close-up on one matrix and drivers
 ![image](https://github.com/user-attachments/assets/6af99db9-f6dd-43ef-a9e7-f797d15006f3)
 
 **total time spent (estimate): 3 hours**
+
+# May 27th, part 3:
+start time: 11pm
+
+ok i'm going to start on the pcb layout. I'm not ghoing to try to do routing tonight, but i do want to at least get the rough positions of things figured out.
+
+ok, i'm about 30 mins in, and its becoming clear that i have to rotate the top and bottom rows of displays 90 degrees so i can fit the row connectors in. this will cause some headaches when doing the firmware, but i don't think i have a choice. this is what it's looking like now:
