@@ -95,3 +95,9 @@ and that may not look terrible, but keep in mind that almost every empty pad is 
 
 **total time spent: 1.5 hours**
 **total time on May 27th: 7 hours**
+# May 28th:
+Start time: 9am
+Okay I'm starting to route the rows to each other. I'm changing the footprint of the mOSTFETS slightly to allow a trace to fit between their pads.
+[one hour later]
+so i've gotten the middle rows and the rght column and a half routed. it's difficult but not impossible. the top and bottom rows are going to be a massive pain since they're rotated.
+** total time spent: 1 hour**

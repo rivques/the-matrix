@@ -1,0 +1,184 @@
+(footprint "TO-251-3_Vertical_ThinPads"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "TO-251-3, Vertical, RM 2.29mm, IPAK, see https://www.diodes.com/assets/Package-Files/TO251.pdf, generated with kicad-footprint-generator TO_SOT_THT_generate.py")
+	(tags "TO-251-3 Vertical RM 2.29mm IPAK")
+	(property "Reference" "REF**"
+		(at 2.29 -2.22 0)
+		(layer "F.SilkS")
+		(uuid "64882d2f-09ac-4057-8b93-935a04bd0a22")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "TO-251-3_Vertical_ThinPads"
+		(at 2.29 1.98 0)
+		(layer "F.Fab")
+		(uuid "b55feeb0-48ef-4f3e-b6c0-5a0f91b7c57d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3ecfa3a7-fca7-4bf8-b5bc-08a5cd430f64")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d5da2d22-3b4c-46c6-8def-80d27aaa089b")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_line
+		(start -1.11 -1.38)
+		(end -1.11 -1.16)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "f18540cf-acb7-491a-bb82-ef1c58a7fa3a")
+	)
+	(fp_line
+		(start -1.11 -1.38)
+		(end 5.69 -1.38)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a824b334-750a-451d-a12d-f602ac18a27d")
+	)
+	(fp_line
+		(start 3.409 -0.77)
+		(end 3.461 -0.77)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "07129676-9b20-4813-bd7c-831090a7fe2e")
+	)
+	(fp_line
+		(start 3.409 1.14)
+		(end 3.461 1.14)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "2637274a-afdd-4873-9bf8-60f1c6d70f19")
+	)
+	(fp_line
+		(start 5.69 -1.38)
+		(end 5.69 -1.16)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "08291b19-0015-498e-8c17-ebc3411b98d4")
+	)
+	(fp_rect
+		(start 5.83 1.28)
+		(end -1.25 -1.52)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "7295f7e2-c946-4db0-bbec-d77b01127245")
+	)
+	(fp_line
+		(start -1 -0.77)
+		(end 5.58 -0.77)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "2c752522-5dee-4afe-8376-9328e38e8e93")
+	)
+	(fp_rect
+		(start -1 -1.27)
+		(end 5.58 1.03)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "28ce3915-d1b2-4457-8298-19c820cac87f")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 2.29 -0.12 0)
+		(layer "F.Fab")
+		(uuid "016ea326-ce2e-43b1-afba-eba6d5368cc9")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole rect
+		(at 0 0)
+		(size 1.6 1.8)
+		(drill 1.1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "fe8fa727-2bac-48bd-b253-9d1aee9a3b98")
+	)
+	(pad "2" thru_hole oval
+		(at 2.29 0)
+		(size 1.6 1.8)
+		(drill 1.1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "0c9ea71c-95b2-4658-b344-95b7d19e1448")
+	)
+	(pad "3" thru_hole oval
+		(at 4.58 0)
+		(size 1.6 1.8)
+		(drill 1.1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "7fb3f483-81a8-41b9-b9cf-ad17bde993e3")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Package_TO_SOT_THT.3dshapes/TO-251-3_Vertical.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)
