@@ -14750,11 +14750,11 @@
 	(footprint "Package_TO_SOT_THT:TO-251-3_Vertical"
 		(layer "B.Cu")
 		(uuid "19004c97-bfcb-414c-a098-49978acf9410")
-		(at 139.25 110.75 180)
+		(at 141.25 110.5 90)
 		(descr "TO-251-3, Vertical, RM 2.29mm, IPAK, see https://www.diodes.com/assets/Package-Files/TO251.pdf, generated with kicad-footprint-generator TO_SOT_THT_generate.py")
 		(tags "TO-251-3 Vertical RM 2.29mm IPAK")
 		(property "Reference" "Q22"
-			(at 2.29 2.22 0)
+			(at 2.29 2.22 90)
 			(layer "B.SilkS")
 			(uuid "334ac1d7-09bf-43a8-b330-8951ef2d0d1f")
 			(effects
@@ -14766,7 +14766,7 @@
 			)
 		)
 		(property "Value" "Q_PMOS_GDS"
-			(at 2.29 -1.98 0)
+			(at 2.29 -1.98 90)
 			(layer "B.Fab")
 			(uuid "fc7f0417-a1bf-4a64-9a3a-140656990284")
 			(effects
@@ -14778,7 +14778,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "7b7f297f-c1e0-46a6-b48a-4d10d938305e")
@@ -14791,7 +14791,7 @@
 			)
 		)
 		(property "Description" "P-MOSFET transistor, gate/drain/source"
-			(at 0 0 0)
+			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "86addcbd-e851-4b48-a560-7e3ca4f4ac45")
@@ -14808,14 +14808,14 @@
 		(sheetfile "the-matrix.kicad_sch")
 		(attr through_hole)
 		(fp_line
-			(start 5.69 1.38)
-			(end 5.69 1.16)
+			(start 3.409 -1.14)
+			(end 3.461 -1.14)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "B.SilkS")
-			(uuid "acc558b5-9974-445e-aea4-a2ced307f576")
+			(uuid "6e91d594-8ef0-419b-b668-51d110581585")
 		)
 		(fp_line
 			(start 3.409 0.77)
@@ -14828,24 +14828,14 @@
 			(uuid "593dfdbc-2a66-4cc4-9f92-bb9e0aa8fc9f")
 		)
 		(fp_line
-			(start 3.409 -1.14)
-			(end 3.461 -1.14)
+			(start 5.69 1.38)
+			(end 5.69 1.16)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "B.SilkS")
-			(uuid "6e91d594-8ef0-419b-b668-51d110581585")
-		)
-		(fp_line
-			(start -1.11 1.38)
-			(end 5.69 1.38)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "a6becbb3-a195-47f2-b517-c2e8f64e9771")
+			(uuid "acc558b5-9974-445e-aea4-a2ced307f576")
 		)
 		(fp_line
 			(start -1.11 1.38)
@@ -14856,6 +14846,16 @@
 			)
 			(layer "B.SilkS")
 			(uuid "e348de94-c5f9-41a3-875e-da93be05bdcf")
+		)
+		(fp_line
+			(start -1.11 1.38)
+			(end 5.69 1.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "a6becbb3-a195-47f2-b517-c2e8f64e9771")
 		)
 		(fp_rect
 			(start 5.83 -1.28)
@@ -14890,7 +14890,7 @@
 			(uuid "7a81e485-e9fa-4912-828f-f8a811aa79ea")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.29 0.12 0)
+			(at 2.29 0.12 90)
 			(layer "B.Fab")
 			(uuid "0129a295-ab67-4d80-935d-51a11ae83f3a")
 			(effects
@@ -14902,7 +14902,7 @@
 			)
 		)
 		(pad "1" thru_hole rect
-			(at 0 0 180)
+			(at 0 0 90)
 			(size 1.7175 1.8)
 			(drill 1.1)
 			(layers "*.Cu" "*.Mask")
@@ -14913,7 +14913,7 @@
 			(uuid "eb52e596-bb1b-412d-a3c8-75a5306d09bb")
 		)
 		(pad "2" thru_hole oval
-			(at 2.29 0 180)
+			(at 2.29 0 90)
 			(size 1.7175 1.8)
 			(drill 1.1)
 			(layers "*.Cu" "*.Mask")
@@ -14924,7 +14924,7 @@
 			(uuid "d97296c7-efde-4c40-b1c1-463db1ea8d16")
 		)
 		(pad "3" thru_hole oval
-			(at 4.58 0 180)
+			(at 4.58 0 90)
 			(size 1.7175 1.8)
 			(drill 1.1)
 			(layers "*.Cu" "*.Mask")
@@ -18836,7 +18836,7 @@
 	(footprint "Package_DIP:DIP-16_W7.62mm"
 		(layer "B.Cu")
 		(uuid "2f950894-c1b4-4764-898e-0b4b029e9686")
-		(at 140.5 83.22 180)
+		(at 140.5 84.22 180)
 		(descr "16-lead though-hole mounted DIP package, row spacing 7.62mm (300 mils)")
 		(tags "THT DIP DIL PDIP 2.54mm 7.62mm 300mil")
 		(property "Reference" "U3"
@@ -23268,7 +23268,7 @@
 	(footprint "Package_TO_SOT_THT:TO-251-3_Vertical"
 		(layer "B.Cu")
 		(uuid "52873337-408d-419d-8892-84931a20fd1d")
-		(at 153 105.25 -90)
+		(at 153 105.75 -90)
 		(descr "TO-251-3, Vertical, RM 2.29mm, IPAK, see https://www.diodes.com/assets/Package-Files/TO251.pdf, generated with kicad-footprint-generator TO_SOT_THT_generate.py")
 		(tags "TO-251-3 Vertical RM 2.29mm IPAK")
 		(property "Reference" "Q17"
@@ -23468,7 +23468,7 @@
 	(footprint "Package_TO_SOT_THT:TO-251-3_Vertical"
 		(layer "B.Cu")
 		(uuid "55ab9e6a-e426-4c89-a99a-793af1340677")
-		(at 160.75 106 180)
+		(at 160.75 106.62 180)
 		(descr "TO-251-3, Vertical, RM 2.29mm, IPAK, see https://www.diodes.com/assets/Package-Files/TO251.pdf, generated with kicad-footprint-generator TO_SOT_THT_generate.py")
 		(tags "TO-251-3 Vertical RM 2.29mm IPAK")
 		(property "Reference" "Q21"
@@ -24653,7 +24653,7 @@
 	(footprint "Package_TO_SOT_THT:TO-251-3_Vertical"
 		(layer "B.Cu")
 		(uuid "6b9ec9e0-0137-47cc-a4c1-e9cacf774d53")
-		(at 139.25 104.5 180)
+		(at 137.29 107.25 180)
 		(descr "TO-251-3, Vertical, RM 2.29mm, IPAK, see https://www.diodes.com/assets/Package-Files/TO251.pdf, generated with kicad-footprint-generator TO_SOT_THT_generate.py")
 		(tags "TO-251-3 Vertical RM 2.29mm IPAK")
 		(property "Reference" "Q24"
@@ -28900,7 +28900,7 @@
 	(footprint "Package_DIP:DIP-20_W7.62mm"
 		(layer "B.Cu")
 		(uuid "7bd38645-f5b0-4057-999c-21d67d8c1d35")
-		(at 182.055 52.26 180)
+		(at 182.055 53.32 180)
 		(descr "20-lead though-hole mounted DIP package, row spacing 7.62mm (300 mils)")
 		(tags "THT DIP DIL PDIP 2.54mm 7.62mm 300mil")
 		(property "Reference" "U8"
@@ -29510,7 +29510,7 @@
 	(footprint "Package_DIP:DIP-20_W7.62mm"
 		(layer "B.Cu")
 		(uuid "7eabb803-dbbd-4764-b173-f046a4ac3253")
-		(at 182 79.15 180)
+		(at 182 80.47 180)
 		(descr "20-lead though-hole mounted DIP package, row spacing 7.62mm (300 mils)")
 		(tags "THT DIP DIL PDIP 2.54mm 7.62mm 300mil")
 		(property "Reference" "U9"
@@ -30377,7 +30377,7 @@
 		(path "/b6be7c1e-7e0e-4b21-8e32-92837ee45a35")
 		(sheetname "/")
 		(sheetfile "the-matrix.kicad_sch")
-		(attr through_hole)
+		(attr through_hole dnp)
 		(fp_line
 			(start -1.38 1.38)
 			(end 0 1.38)
@@ -34712,7 +34712,7 @@
 	(footprint "Package_DIP:DIP-20_W7.62mm"
 		(layer "B.Cu")
 		(uuid "b69d037c-b6b9-4613-9540-166049acdf7f")
-		(at 161.87 78.9 180)
+		(at 161.75 79.93 180)
 		(descr "20-lead though-hole mounted DIP package, row spacing 7.62mm (300 mils)")
 		(tags "THT DIP DIL PDIP 2.54mm 7.62mm 300mil")
 		(property "Reference" "U10"
@@ -35322,7 +35322,7 @@
 	(footprint "Package_DIP:DIP-20_W7.62mm"
 		(layer "B.Cu")
 		(uuid "b6eb3d9c-b51f-4ccc-8474-c6f794552d90")
-		(at 161.87 52.4 180)
+		(at 161.87 53.07 180)
 		(descr "20-lead though-hole mounted DIP package, row spacing 7.62mm (300 mils)")
 		(tags "THT DIP DIL PDIP 2.54mm 7.62mm 300mil")
 		(property "Reference" "U7"
@@ -36132,7 +36132,7 @@
 	(footprint "Package_TO_SOT_THT:TO-251-3_Vertical"
 		(layer "B.Cu")
 		(uuid "bc97b5c6-8160-4c34-aaf8-0a200e806b19")
-		(at 180.25 108.25 180)
+		(at 180.25 110.5 180)
 		(descr "TO-251-3, Vertical, RM 2.29mm, IPAK, see https://www.diodes.com/assets/Package-Files/TO251.pdf, generated with kicad-footprint-generator TO_SOT_THT_generate.py")
 		(tags "TO-251-3 Vertical RM 2.29mm IPAK")
 		(property "Reference" "Q18"
@@ -37174,7 +37174,7 @@
 		(path "/a7e49148-fb85-4639-bf5d-dd485be40f42")
 		(sheetname "/")
 		(sheetfile "the-matrix.kicad_sch")
-		(attr through_hole)
+		(attr through_hole dnp)
 		(fp_line
 			(start 1.38 -1.27)
 			(end 1.38 -31.86)
@@ -37896,7 +37896,7 @@
 	(footprint "Package_TO_SOT_THT:TO-251-3_Vertical"
 		(layer "B.Cu")
 		(uuid "d3e4ddb6-4332-42c6-b52d-0c9ad0d3827c")
-		(at 160.71 109.13 180)
+		(at 160.71 109.75 180)
 		(descr "TO-251-3, Vertical, RM 2.29mm, IPAK, see https://www.diodes.com/assets/Package-Files/TO251.pdf, generated with kicad-footprint-generator TO_SOT_THT_generate.py")
 		(tags "TO-251-3 Vertical RM 2.29mm IPAK")
 		(property "Reference" "Q20"
@@ -38096,7 +38096,7 @@
 	(footprint "Package_TO_SOT_THT:TO-251-3_Vertical"
 		(layer "B.Cu")
 		(uuid "d8630189-3f94-4d4e-9bcc-600057d39584")
-		(at 180.25 105.25 180)
+		(at 180.25 107.5 180)
 		(descr "TO-251-3, Vertical, RM 2.29mm, IPAK, see https://www.diodes.com/assets/Package-Files/TO251.pdf, generated with kicad-footprint-generator TO_SOT_THT_generate.py")
 		(tags "TO-251-3 Vertical RM 2.29mm IPAK")
 		(property "Reference" "Q19"
@@ -38496,7 +38496,7 @@
 	(footprint "Package_TO_SOT_THT:TO-251-3_Vertical"
 		(layer "B.Cu")
 		(uuid "efd2991f-aa99-47dc-a914-34095a953b34")
-		(at 139.25 107.62 180)
+		(at 137.33 110.5 180)
 		(descr "TO-251-3, Vertical, RM 2.29mm, IPAK, see https://www.diodes.com/assets/Package-Files/TO251.pdf, generated with kicad-footprint-generator TO_SOT_THT_generate.py")
 		(tags "TO-251-3 Vertical RM 2.29mm IPAK")
 		(property "Reference" "Q23"

@@ -85,7 +85,7 @@ ok now for the (hopefully easier!) task of shoving all the ics and mosfets under
 
 ...and i'm realizing that there's no way to do this without 4 layers. fortunately it's not that much mroe expensive.
 
-30 more minutes later, these mosfets are just way too big. i'm going to switch to the IRFU9024NPBF, which is actually cheaper than my original option when ordering from digikey, and it's in the smaller TO-251 package.
+30 more minutes later, these mosfets are just way too big. i'm going to switch to the [IRFU9024NPBF](https://www.aliexpress.us/item/2251832086805199.htm), which is actually cheaper than my original option, and it's in the smaller TO-251 package.
 
 ...it's been another 30 minutes, and i've gotten everything placed, thanks to the smaller mosfets. here's what it's looking like:
 
