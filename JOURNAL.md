@@ -113,4 +113,6 @@ Start time: 2:45pm
 I'm going to start routing the connectors. Hopefully I can stay on the interal layers, but I'm okay to use the outer ones sparingly.
 [one hour later]
 okay, one connector and some of the mosfets are routed. i've needed the outer layers 3 times so far - not as bad as I was expecting!
-**total time spent: 1 hour**
+[another hour later]
+ok, another connector and the rest of the mosfets' column connections are routed. next up: the row connectors.
+**total time spent: 2 hour**
