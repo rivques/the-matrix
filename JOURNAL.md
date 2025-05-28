@@ -56,9 +56,13 @@ unit joints
 ```
 ...that's not as bad as I thought. It'll probably end up being twice that, but I was afraid it'd be something like 40 hours. This project seems feasible!
 
+**total time spent (estimate): 2.5 hours**: 
+
 # Mat 27th, part 2:
 OK i'm going to sit down and try to work out a schematic. I also realized that I needed to switch to a P-channel MOSFET for the high side, which I changed in the BOM.
 
-[3 hours later]
+[much later]
 
 ok so there's a schematic now. i decided im not going to have a separate PCB for the control board, i'll just do that on perfboard. (again, bom has been updated). so now the plan is to make 9 (well, 10, because of JLC order sizing) boards to _almost_ the schematic. each board will be populated with its 25 displays and the 4 40 pin connectors, and then one board in each row/column will have that row/colum's driving circuitry. Then the board with driving circuitry will be connected to the control board, which will have a pi pico w on it. next up: routing this monstrosity. i'll have to make sure i don't make impossible sandwhiches, but other than that it shouldn't be difficult, just tedious.
+
+**total time spent (estimate): 3 hours**
