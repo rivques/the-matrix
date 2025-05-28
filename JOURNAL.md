@@ -78,6 +78,7 @@ start time: 11pm
 ok i'm going to start on the pcb layout. I'm not ghoing to try to do routing tonight, but i do want to at least get the rough positions of things figured out.
 
 ok, i'm about 30 mins in, and its becoming clear that i have to rotate the top and bottom rows of displays 90 degrees so i can fit the row connectors in. this will cause some headaches when doing the firmware, but i don't think i have a choice. this is what it's looking like now:
+
 ![image](https://github.com/user-attachments/assets/264028eb-a2ef-4b61-ad5d-3660abba76a9)
 
 ok now for the (hopefully easier!) task of shoving all the ics and mosfets under the displays.
@@ -87,6 +88,8 @@ ok now for the (hopefully easier!) task of shoving all the ics and mosfets under
 30 more minutes later, these mosfets are just way too big. i'm going to switch to the IRFU9024NPBF, which is actually cheaper than my original option when ordering from digikey, and it's in the smaller TO-251 package.
 
 ...it's been another 30 minutes, and i've gotten everything placed, thanks to the smaller mosfets. here's what it's looking like:
+
+![image](https://github.com/user-attachments/assets/ac2b804d-06ce-40c6-a030-e04c9fffb564)
 
 and that may not look terrible, but keep in mind that almost every empty pad is going to have an led matrix in it from the other side, and that's not even considering the traces between the near-1000 pads on this board. if this is possible, it's possible by the slimmest of margins.
 
