@@ -115,4 +115,9 @@ I'm going to start routing the connectors. Hopefully I can stay on the interal l
 okay, one connector and some of the mosfets are routed. i've needed the outer layers 3 times so far - not as bad as I was expecting!
 [another hour later]
 ok, another connector and the rest of the mosfets' column connections are routed. next up: the row connectors.
-**total time spent: 2 hour**
+
+...this is _really_ annoying routing.
+
+...ok i've routed the left row connector. i'll do the right one later.
+
+**total time spent: 2.5 hour**
