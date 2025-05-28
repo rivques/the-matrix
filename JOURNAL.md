@@ -95,6 +95,7 @@ and that may not look terrible, but keep in mind that almost every empty pad is 
 
 **total time spent: 1.5 hours**
 **total time on May 27th: 7 hours**
+
 # May 28th:
 Start time: 9am
 Okay I'm starting to route the rows to each other. I'm changing the footprint of the mOSTFETS slightly to allow a trace to fit between their pads.
@@ -105,4 +106,11 @@ Ok, i have all of the matrices routed, using just the internal layers. I haven't
 
 ![image](https://github.com/user-attachments/assets/cb18ec98-480b-40fe-80e5-c5641aa0dc52)
 
-** total time spent: 2 hours**
+**total time spent: 2 hours**
+
+# May 28th, part 2:
+Start time: 2:45pm
+I'm going to start routing the connectors. Hopefully I can stay on the interal layers, but I'm okay to use the outer ones sparingly.
+[one hour later]
+okay, one connector and some of the mosfets are routed. i've needed the outer layers 3 times so far - not as bad as I was expecting!
+**total time spent: 1 hour**
