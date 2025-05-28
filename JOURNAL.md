@@ -42,17 +42,23 @@ Part|Quantity|Price/unit|Total price|# pins/unit|# pins total|Link
 788AS 8x8 LED Matrix|225|$0.35|$80.00|16|3600|https://www.aliexpress.us/item/2251832771187101.html
 74HC595 Shift Register|15|$0.22|$4.00|16|240|https://www.aliexpress.us/item/3256807421796895.html
 TPIC6B595 Shift Register|15|$0.50|$7.50|16|240|https://www.aliexpress.us/item/3256806981485001.html
-IRLZ44N MOSFET|120|$0.20|$25.00|3|360|https://www.aliexpress.us/item/3256807774117402.html
+IRF9520 MOSFET|120|$0.40|$48.00|3|360|https://www.aliexpress.us/item/3256806868594722.html
 220Ω Resistor|120|$0.02|$2.80|2|240|https://www.aliexpress.us/item/2251832766343175.html
 5V 3A Power Supply|1|$4.00|$4.00|2|2|https://www.aliexpress.us/item/3256805577151044.html
 Matrix PCB|10|$2.20|$22.00|0|0|JLCPCB
-Control PCB|5|$2.80|$14.00|0|0|JLCPCB
-Total|||$160||4700|
+Total|||$164||4700|
 
-Okay, $160 isn't terrible. What I'm more concerned about is 4700 joints, that'll take a while. Rounding up to 5000 for the connectors and stuff, if I can do 40 joints per minute (optimistic), that'll take:
+Okay, $164 isn't terrible. What I'm more concerned about is 4700 joints, that'll take a while. Rounding up to 5000 for the connectors and stuff, if I can do 40 joints per minute (optimistic), that'll take:
 ```numbat
 unit joints
 5000 joints / (40 joints/minute)
     = 125 minutes
 ```
 ...that's not as bad as I thought. It'll probably end up being twice that, but I was afraid it'd be something like 40 hours. This project seems feasible!
+
+# Mat 27th, part 2:
+OK i'm going to sit down and try to work out a schematic. I also realized that I needed to switch to a P-channel MOSFET for the high side, which I changed in the BOM.
+
+[3 hours later]
+
+ok so there's a schematic now. i decided im not going to have a separate PCB for the control board, i'll just do that on perfboard. (again, bom has been updated). so now the plan is to make 9 (well, 10, because of JLC order sizing) boards to _almost_ the schematic. each board will be populated with its 25 displays and the 4 40 pin connectors, and then one board in each row/column will have that row/colum's driving circuitry. Then the board with driving circuitry will be connected to the control board, which will have a pi pico w on it. next up: routing this monstrosity. i'll have to make sure i don't make impossible sandwhiches, but other than that it shouldn't be difficult, just tedious.

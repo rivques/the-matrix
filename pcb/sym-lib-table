@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "ta08-81GWA")(type "KiCad")(uri "${KIPRJMOD}/snapmagic/TA08-81GWA.kicad_sym")(options "")(descr ""))
+  (lib (name "TPIC6B595N")(type "KiCad")(uri "${KIPRJMOD}/snapmagic/TPIC6B595N.kicad_sym")(options "")(descr ""))
+)
