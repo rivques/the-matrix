@@ -6,7 +6,7 @@ I've had the ultra-clock idea for a while, and I originally wanted to use flip d
 
 The full display is constructed of 9 display modules, each of which itself contains 25 8x8 LED matrices. Each module also contains positions for the shift registers and MOSFETs that make up the control circuitry.
 
-The display is not without its quirks. Most of these stem from either the geometric realities of trying to fit everything onto the board or a software-compensatabel routing mistake that would take hours of work to fix in hardware. The biggest of these is that the current-limiting resistors aren't actually on the board but instead fly above the back of it. Also, the bottom and top row of matrices on each module are rotated 90 degrees, and every other module has pairs of rows and columns swapped (e.g. col1 connects to col2, col2->col1, col3->col4, etc.) This is something I can fix in software.
+The display is not without its quirks. Most of these stem from either the geometric realities of trying to fit everything onto the board or a software-compensatable routing mistake that would take hours of work to fix in hardware. The biggest of these is that the current-limiting resistors aren't actually on the board but instead fly above the back of it. Also, the bottom and top row of matrices on each module are rotated 90 degrees, and every other module has pairs of rows and columns swapped (e.g. col1 connects to col2, col2->col1, col3->col4, etc.) This is something I can fix in software.
 
 The display will probably be driven by a Pi Pico W or an ESP32, but especially if high framerates are not required it could be also driven by something less powerful. The driver connects to each row and column via the row control and column control pads.
 
