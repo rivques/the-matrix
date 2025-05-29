@@ -1,0 +1,9 @@
+"Id";"Designator";"Footprint";"Quantity";"Designation";"Supplier and ref";
+1;"DS5,DS3,DS18,DS2,DS6,DS12,DS1,DS19,DS22,DS25,DS8,DS17,DS16,DS13,DS9,DS11,DS4,DS15,DS24,DS23,DS20,DS7,DS14,DS21,DS10";"DISPLAY_TA08-81GWA";25;"TA08-81GWA";;;
+2;"Q13,Q6,Q26,Q39,Q36,Q11,Q22,Q38,Q33,Q14,Q5,Q15,Q10,Q28,Q17,Q21,Q34,Q31,Q9,Q24,Q3,Q16,Q4,Q29,Q25,Q30,Q37,Q1,Q7,Q18,Q8,Q32,Q40,Q27,Q20,Q19,Q12,Q23,Q2,Q35";"TO-251-3_Vertical_ThinPads";40;"Q_PMOS_GDS";;;
+3;"U6,U8,U9,U10,U7";"DIP-20_W7.62mm";5;"TPIC6B595N";;;
+4;"J6,J5";"PinSocket_2x20_P2.54mm_Horizontal";2;"Conn_02x20_Odd_Even";;;
+5;"U3,U4,U1,U2,U5";"DIP-16_W7.62mm";5;"74HC595";;;
+6;"J4,J3";"PinHeader_2x20_P2.54mm_Horizontal";2;"Conn_02x20_Odd_Even";;;
+7;"J2";"PinHeader_1x10_P2.54mm_Vertical";1;"DNP";;;
+8;"J1";"PinHeader_1x13_P2.54mm_Vertical";1;"DNP";;;

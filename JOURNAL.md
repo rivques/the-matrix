@@ -196,5 +196,43 @@ ok, I _think_ the board is complete! Here are some screenshots:
 ![image](https://github.com/user-attachments/assets/d31926eb-5e25-452a-9894-92f77d3c2094)|![image](https://github.com/user-attachments/assets/0f540712-941e-431a-b720-3c40be31190e)|![image](https://github.com/user-attachments/assets/c6b49828-dd3e-41d1-93e7-472a4d3e2d81)
 
 
+going to export the gerbers and get a real price!
+
+ok so it's $9 for the boards (with a coupon), plus $16 shipping. i can't believe how cheap JLC is.
+
+and just going to do a revised bill of materials here:
+(for some parts I'm getting spares since they'd be a pain to source if some turn out to be dead on arrival. if this can't be included in the grant i'll happily cover the spares myself)
+
+Part|Quantity|Price/unit|Total price|# pins/unit|# pins total|Note|Link
+---|---|---|---|---|---|---
+788AS 8x8 LED Matrix|230|$0.35|$82.00|16|3600|not going to count on 0% DoA rate here|https://www.aliexpress.us/item/2251832771187101.html
+74HC595 Shift Register|15|$0.22|$4.00|16|240|2x20 is cheaper than 3x5|https://www.aliexpress.us/item/3256807421796895.html
+TPIC6B595 Shift Register|20|$0.50|$10|16|240|again, not counting on no DoA|https://www.aliexpress.us/item/3256806981485001.html
+IRF9520 MOSFET|130|$0.40|$50.00|3|360||https://www.aliexpress.us/item/3256806868594722.html
+220Ω Resistor|120|
+
+wait
+
+waiittttttt
+
+i forgot the current-limiting resistors.
+
+time to go back to routing hell (:
+
+ok wait can i get away without them  
+so the mosfets will source up to like 1.5A/col  
+and the tpic6b595s will sink 150mA/row  
+and the max current per led is 20mA  
+yeahhhhh  
+
+ok next idea: can i avoid putting the resistors on the board using the third dimension  
+like can i directly solder one leg to the drain pin of the tpic, and then solder the other leg to the pad where that drain pin is meant to go  
+the datasheet says the legs extend 1/8th inch below the body,
+so... maybe?
+uhh let me try this with a different DIP part
 
 
+ok after experimenting a bit i dont think that's feasible. but maybe i could solder a resistor to the chip, then solder the other leg to somewhere else where the net is connected (i.e. onto one of the matrix legs).  
+looking at the pcb, the farthest distance that would be is 50mm, and my resistor is 60mm long. so that should work! it'll be really, really ugly, but it should work.
+
+ok crisis mostly averted. i'm going to go add silkscreen to where i experct resistors to be and then i'll finish the bom.
