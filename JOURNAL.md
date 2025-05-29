@@ -186,3 +186,7 @@ ok it was in the last commit so hopefully i can just put it back and things will
 yeah it turned out fine. i must have deleted it right before running drc. phew.
 
 anyways time to go mess with silkscreens
+
+[30 minutes later]
+
+ok, I _think_ the board is complete! Here are some screenshots:
