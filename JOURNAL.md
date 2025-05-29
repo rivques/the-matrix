@@ -99,9 +99,13 @@ and that may not look terrible, but keep in mind that almost every empty pad is 
 # May 28th:
 Start time: 9am
 Okay I'm starting to route the rows to each other. I'm changing the footprint of the mOSTFETS slightly to allow a trace to fit between their pads.
+
 [one hour later]
+
 so i've gotten the middle rows and the rght column and a half routed. it's difficult but not impossible. the top and bottom rows are going to be a massive pain since they're rotated.
+
 [another hour later]
+
 Ok, i have all of the matrices routed, using just the internal layers. I haven't routed the connectors or drivers yet, but hopefully the outer layers are enough room for that. here's what it looks like now:
 
 ![image](https://github.com/user-attachments/assets/cb18ec98-480b-40fe-80e5-c5641aa0dc52)
@@ -111,9 +115,13 @@ Ok, i have all of the matrices routed, using just the internal layers. I haven't
 # May 28th, part 2:
 Start time: 2:45pm
 I'm going to start routing the connectors. Hopefully I can stay on the interal layers, but I'm okay to use the outer ones sparingly.
+
 [one hour later]
+
 okay, one connector and some of the mosfets are routed. i've needed the outer layers 3 times so far - not as bad as I was expecting!
+
 [another hour later]
+
 ok, another connector and the rest of the mosfets' column connections are routed. next up: the row connectors.
 
 ...this is _really_ annoying routing.
@@ -121,3 +129,19 @@ ok, another connector and the rest of the mosfets' column connections are routed
 ...ok i've routed the left row connector. i'll do the right one later.
 
 **total time spent: 2.5 hour**
+# May 28th, part 3:
+Start time: 8:30pm
+ok time to do the last connector and then hopefully the last part won't be that bad.
+
+[30 minutes later]
+
+i've just realized that i set up the connectors wrong in the schematic, so row 1 would connect to row 2 and vice versa, row3<->row4, etc, same with columns. either i can give up the past 3 hours of work, or i can spend a similar amount of time fixing that in software. let me think for a second about that:
+ok so the way this would manifest is just in the display, it wont cause any electrical issues fortunately. it'd just be that the middle row/column of matrices would have their column pairs swapped with each other. i wonder how i can efficiently represent that in software.
+
+well i'm going to have to have a preprocessing step for every frame i want to display. and i'll leave it up to later me to figure out what the best way to swap the columns and rotate the displays is there, i'd rather spend 3 hours programming than 3 hours rerouting stuff i've already done once, and it'll hopefully take less than 3 hours to fix. it's unfortunate, but oh well.
+
+anyways back to routing the last of the right connector, yipee!
+
+[another 30 minutes later]
+
+ok, all connectors complete! now the only thing left is just hooking up the shift registers, and i have almost all of the outer layers to make it happen. here's how it's looking now:
