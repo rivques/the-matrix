@@ -145,3 +145,5 @@ anyways back to routing the last of the right connector, yipee!
 [another 30 minutes later]
 
 ok, all connectors complete! now the only thing left is just hooking up the shift registers, and i have almost all of the outer layers to make it happen. here's how it's looking now:
+
+![image](https://github.com/user-attachments/assets/5eb50ffb-1bde-4139-b251-8824eeef83bf)
