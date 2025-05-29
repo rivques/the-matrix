@@ -180,3 +180,9 @@ okay, so ~200 of those were because i'd input the JLC via size constraints (conf
 
 WAIT I RAN THE SCHEMATIC PARITY CHECK AND SOMEWHERE ALONG THE WAY I FULLY DELETED A DISPLAY
 ok time to trawl thru the git history and find when that happened
+
+ok it was in the last commit so hopefully i can just put it back and things will be fine
+
+yeah it turned out fine. i must have deleted it right before running drc. phew.
+
+anyways time to go mess with silkscreens
