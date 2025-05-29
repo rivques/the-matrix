@@ -190,3 +190,11 @@ anyways time to go mess with silkscreens
 [30 minutes later]
 
 ok, I _think_ the board is complete! Here are some screenshots:
+![image](https://github.com/user-attachments/assets/95647ebd-f127-4075-afd9-235a73a2d123)|![image](https://github.com/user-attachments/assets/defa0192-8b39-40a0-ad77-e2c8924c1cd8)|![image](https://github.com/user-attachments/assets/62e2b62d-9c90-4d13-956a-6170f5c1c6ed)
+---|---|---
+![image](https://github.com/user-attachments/assets/95b9d90a-ca58-4ee1-8662-008ed6dabccc)|![image](https://github.com/user-attachments/assets/8bcc3958-d47c-474d-92ad-c9f2e3ac8011)|![image](https://github.com/user-attachments/assets/6e4d1ab8-3fde-4e50-ab3e-6f93865b8149)
+![image](https://github.com/user-attachments/assets/d31926eb-5e25-452a-9894-92f77d3c2094)|![image](https://github.com/user-attachments/assets/0f540712-941e-431a-b720-3c40be31190e)|![image](https://github.com/user-attachments/assets/c6b49828-dd3e-41d1-93e7-472a4d3e2d81)
+
+
+
+
