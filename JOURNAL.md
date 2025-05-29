@@ -147,3 +147,18 @@ anyways back to routing the last of the right connector, yipee!
 ok, all connectors complete! now the only thing left is just hooking up the shift registers, and i have almost all of the outer layers to make it happen. here's how it's looking now:
 
 ![image](https://github.com/user-attachments/assets/5eb50ffb-1bde-4139-b251-8824eeef83bf)
+
+ok now i'm going to hook the mosfets up to the shift registers
+
+[30 minutes later]
+ok the mosfets are connected to the low-shift registers. now i need to connect the rows to the low-side shift registers, connect the shift register data lines to each other, and give power to everything.
+
+[15 mins later]
+
+all shift registers are connected to their matrices/mosfets. next: data lines.
+
+[15 mins later]
+ok the low-side data lines were pretty quick, because there's patterns between the chips. i've done the data lines on 1 high-side driver and they were super annoying - they're long and there's no patterns from chip to chip. i'm going to call it a night.
+
+**total time spent: 2 hours**
+**total time on May 28th: 6.5 hours**
