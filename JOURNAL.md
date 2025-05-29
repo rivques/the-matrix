@@ -162,3 +162,10 @@ ok the low-side data lines were pretty quick, because there's patterns between t
 
 **total time spent: 2 hours**
 **total time on May 28th: 6.5 hours**
+# May 29th:
+Start time: 9am
+Time to finish up the data lines.
+
+[45 minutes later]
+
+That wasn't so bad. Now my only remaining unrouted nets are power and ground!
