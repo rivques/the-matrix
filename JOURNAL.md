@@ -204,11 +204,11 @@ and just going to do a revised bill of materials here:
 (for some parts I'm getting spares since they'd be a pain to source if some turn out to be dead on arrival. if this can't be included in the grant i'll happily cover the spares myself)
 
 Part|Quantity|Price/unit|Total price|# pins/unit|# pins total|Note|Link
----|---|---|---|---|---|---
+---|---|---|---|---|---|---|---
 788AS 8x8 LED Matrix|230|$0.35|$82.00|16|3600|not going to count on 0% DoA rate here|https://www.aliexpress.us/item/2251832771187101.html
 74HC595 Shift Register|15|$0.22|$4.00|16|240|2x20 is cheaper than 3x5|https://www.aliexpress.us/item/3256807421796895.html
 TPIC6B595 Shift Register|20|$0.50|$10|16|240|again, not counting on no DoA|https://www.aliexpress.us/item/3256806981485001.html
-IRF9520 MOSFET|130|$0.40|$50.00|3|360||https://www.aliexpress.us/item/3256806868594722.html
+IRFU9024NPBF MOSFET|130|$0.40|$50.00|3|360||https://www.aliexpress.us/item/3256806868594722.html
 220Ω Resistor|120|
 
 wait
@@ -236,3 +236,23 @@ ok after experimenting a bit i dont think that's feasible. but maybe i could sol
 looking at the pcb, the farthest distance that would be is 50mm, and my resistor is 60mm long. so that should work! it'll be really, really ugly, but it should work.
 
 ok crisis mostly averted. i'm going to go add silkscreen to where i experct resistors to be and then i'll finish the bom.
+
+ok silkscreen added and board reexported. that was annoying, and it'll be more annoying in the future, but i don't think i could reasonably add the resistors to the board without spending at least another 5 hours routing.
+
+anyways, BOM:
+
+Part|Quantity|Price/unit|Total price|# pins/unit|# pins total|Note|Link
+---|---|---|---|---|---|---|---
+788AS 8x8 LED Matrix|230|$0.35|$82.00|16|3600|not going to count on 0% DoA rate here|https://www.aliexpress.us/item/2251832771187101.html
+74HC595 Shift Register|15|$0.22|$4.00|16|240|2x20 is cheaper than 3x5|https://www.aliexpress.us/item/3256807421796895.html
+TPIC6B595 Shift Register|20|$0.50|$10|16|240|again, not counting on no DoA|https://www.aliexpress.us/item/3256806981485001.html
+IRFU9024NPBF MOSFET|125|$0.40|$40.00|3|360||https://www.aliexpress.us/item/3256808251284284.html
+220Ω Resistor|120|$0.02|$2.80|2|240|2x100 is cheaper than 12x10|https://www.aliexpress.us/item/2251832766343175.html
+2x20 right-angle header female|2|$2.00|$4.00|40|80||https://www.aliexpress.us/item/3256805899201197.html
+2x20 right-angle header male|2|$2.50|$5.00|40|80||https://www.aliexpress.us/item/3256804718416281.html
+5V 3A Power Supply|1|$4.00|$4.00|2|2||https://www.aliexpress.us/item/3256805577151044.html
+Matrix PCB|10|$2.5|$25.00|0|0|i'll buy this separately from the grant so i can combine it with another order|JLCPCB
+Total|||$173||4850|total w/o PCB: $148 :tada:
+
+i think this is almost ready to ship!
+**total time spent: 3.5 hours**
