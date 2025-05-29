@@ -169,3 +169,14 @@ Time to finish up the data lines.
 [45 minutes later]
 
 That wasn't so bad. Now my only remaining unrouted nets are power and ground!
+
+[30 minutes later]
+
+ok, power and ground are routed, and I learned that fills don't need pre-existing traces in order to automatically connect to nets, so that saved me a lot of work. Time to run DRC and see how bad everything is.
+
+...413+ errors. oh boy.
+
+okay, so ~200 of those were because i'd input the JLC via size constraints (confused via diameter with annular width), so those went away. Most of the rest were because of me putting pads under the displays, which was by design. Then there were a few which were about short traces being unconnected, which I'm ignoring, and a bunch of silkscreen overlap, which I will now go fix.
+
+WAIT I RAN THE SCHEMATIC PARITY CHECK AND SOMEWHERE ALONG THE WAY I FULLY DELETED A DISPLAY
+ok time to trawl thru the git history and find when that happened
