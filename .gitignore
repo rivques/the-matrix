@@ -30,3 +30,4 @@ fp-info-cache
 *.xml
 *.csv
 !*the-matrix-bom.csv
+!BOM.csv
