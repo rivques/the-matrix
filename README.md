@@ -17,7 +17,7 @@ The theoretical max framerate for this board is something like 4096fps, which wo
 Here's a render of the back of the a single display module (the front is just a grid of matrices, which I don't have a 3D model for but I'm sure you can imagine). For more pictures, including the schematic and each internal layer, check out the [journal](https://github.com/rivques/the-matrix/blob/main/JOURNAL.md#may-29th).
 ![image](https://github.com/user-attachments/assets/c6b49828-dd3e-41d1-93e7-472a4d3e2d81)
 
-BOM:
+BOM (for some parts I'm getting spares since they'd be a pain to source if some turn out to be dead on arrival. if this can't be included in the grant i'll happily cover the spares myself):
 
 Part|Quantity|Price/unit|Total price|# pins/unit|# pins total|Note|Link
 ---|---|---|---|---|---|---|---
