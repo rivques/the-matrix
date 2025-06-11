@@ -26,8 +26,8 @@ Part|Quantity|Price/unit|Total price|# pins/unit|# pins total|Note|Link
 TPIC6B595 Shift Register|20|$0.50|$10|16|240|again, not counting on no DoA|https://www.aliexpress.us/item/3256806981485001.html
 IRFU9024NPBF MOSFET|125|$0.40|$40.00|3|360||https://www.aliexpress.us/item/3256808251284284.html
 220Ω Resistor|120|$0.02|$2.80|2|240|2x100 is cheaper than 12x10|https://www.aliexpress.us/item/2251832766343175.html
-2x20 right-angle header female|2|$2.00|$4.00|40|80||https://www.aliexpress.us/item/3256805899201197.html
-2x20 right-angle header male|2|$2.50|$5.00|40|80||https://www.aliexpress.us/item/3256804718416281.html
+2x20 right-angle header female|12|$2.00|$4.00|40|80||https://www.aliexpress.us/item/3256805899201197.html
+2x20 right-angle header male|12|$2.50|$5.00|40|80||https://www.aliexpress.us/item/3256804718416281.html
 5V 3A Power Supply|1|$4.00|$4.00|2|2||https://www.aliexpress.us/item/3256805577151044.html
 Matrix PCB|10|$2.5|$25.00|0|0|i'll buy this separately from the grant so i can combine it with another order|JLCPCB
 Total|||$173||4850|total w/o PCB: $148 :tada:
