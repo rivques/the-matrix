@@ -257,3 +257,12 @@ Total|||$173||4850|total w/o PCB: $148 :tada:
 
 i think this is almost ready to ship!
 **total time spent: 3.5 hours**
+
+# June 26th:
+Start time: 4pm
+
+OK some of the parts have started to arrive. I'm realizing I'm going to need to make a tool to hold the displays in the right place while I solder them, so I'm going to grab the 3D model and throw it in Onshape and see what I can do.
+
+ok, i've got the model in Onshape (and I added a model of the matrix module itself), and I've started to sketch out a magazine page. The holder will have to wait for tomorrow.
+
+**total time spent: 1 hour**
