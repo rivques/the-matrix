@@ -266,3 +266,9 @@ OK some of the parts have started to arrive. I'm realizing I'm going to need to 
 ok, i've got the model in Onshape (and I added a model of the matrix module itself), and I've started to sketch out a magazine page. The holder will have to wait for tomorrow.
 
 **total time spent: 1 hour**
+# June 27th:
+Start time: 11:15am
+
+just nearly finished the magazine page. it took a while but i'm not used to figma. one weird thing i ended up doing was to get a render of the board with a transparent background, I rendered it in KiCad, then remove the background with remove.bg, but that only gave a low-quality version, so I pulled it into GIMP, and used the transparency as a mask on the high-quality render.
+
+**total time spent: 1 hour**
