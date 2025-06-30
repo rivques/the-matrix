@@ -272,3 +272,36 @@ Start time: 11:15am
 just nearly finished the magazine page. it took a while but i'm not used to figma. one weird thing i ended up doing was to get a render of the board with a transparent background, I rendered it in KiCad, then remove the background with remove.bg, but that only gave a low-quality version, so I pulled it into GIMP, and used the transparency as a mask on the high-quality render.
 
 **total time spent: 1 hour**
+
+# June 30th:
+Start time: 4pm
+
+All my parts arrived!
+
+I 3D printed some little feet that I can use while soldering to hold the board at the correct height. 
+
+I'm going to start by soldering the bare minimum support components for a single display (DS1) and go from there. That includes, in order:
+
+- U1
+- U6
+- Q1-Q8
+- DS1
+- R1-R8
+
+Hmm, by not doing the whole board at once I'll make it much more annoying to solder the rest of the backside components. I think it's worth it to be able to test the first display, though. 
+
+As a side note, the order for an entire module will be:
+- U1-U5
+- U6-U10 (with outputs cut)
+- J1-J4 as needed
+- Q1-Q40
+- DS1-DS25
+- R1-R40
+
+[45 mins later]
+aaa i forgot to cut the outputs on U6, so i've had to cut the physical traces, which is luckily possible but is still a pain.
+
+[45 mins later]
+i'm almost there! i've just got 3 jumper resistors left, which are, predictably, the most annoying part. i don't look forward to doing 115 more of them.
+
+**total time spent: 1.5 hours**
