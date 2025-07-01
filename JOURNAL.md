@@ -293,7 +293,7 @@ Hmm, by not doing the whole board at once I'll make it much more annoying to sol
 As a side note, the order for an entire module will be:
 - U1-U5
 - U6-U10 (with outputs cut)
-- J1-J4 as needed
+- J1-J6 as needed
 - Q1-Q40
 - DS1-DS25
 - R1-R40
@@ -305,3 +305,15 @@ aaa i forgot to cut the outputs on U6, so i've had to cut the physical traces, w
 i'm almost there! i've just got 3 jumper resistors left, which are, predictably, the most annoying part. i don't look forward to doing 115 more of them.
 
 **total time spent: 1.5 hours**
+
+# June 30th, part 2:
+Start time: 9:45pm
+
+time to solder the last 3 resistors, then i'll write some test code
+
+[30 mins later]
+resistors soldered! behold:
+
+ok tomorrow we wire it up and start testing!
+**total time spent: 30 mins**
+**total time on June 30th: 2 hours**
