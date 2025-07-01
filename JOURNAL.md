@@ -255,7 +255,7 @@ IRFU9024NPBF MOSFET|125|$0.40|$40.00|3|360||https://www.aliexpress.us/item/32568
 Matrix PCB|10|$2.5|$25.00|0|0|i'll buy this separately from the grant so i can combine it with another order|JLCPCB
 Total|||$173||4850|total w/o PCB: $148 :tada:
 
-i think this is almost ready to ship!
+i think this is almost ready to ship!  
 **total time spent: 3.5 hours**
 
 # June 26th:
@@ -315,6 +315,28 @@ time to solder the last 3 resistors, then i'll write some test code
 resistors soldered! behold (but not too closely):  
 ![image](https://github.com/user-attachments/assets/02790142-4bb1-41dc-9155-b947c5dda2f9)
 
-ok tomorrow we wire it up and start testing!
-**total time spent: 30 mins**
-**total time on June 30th: 2 hours**
+ok tomorrow we wire it up and start testing!  
+**total time spent: 30 mins**  
+**total time on June 30th: 2 hours**  
+
+# July 1st:
+Start time: 12:30pm
+
+time to start on code. i'll start with full software driving, not PIO, while i test things at low FPS.
+
+[an hour later]
+
+i've wired everything up and written some test code and... it's not working. it seems like i'm doing something wrong with at least the low-side shift register, because when i short one of its outputs to ground i do get leds turning on. the voltages on its output pins are either 5 volts (which is reasonable for open-drain state) or 3 volts (which is not reasonable, especially if that's it trying to sink current). it's not unlikely that i broke the chip while soldering, but i'm hoping it's not that. i'm going to write a super simple test program and try to isolate the problem.
+
+[45 mins later]  
+so there's also something wrong with the high-side. i'm focusing on that one first - it seems to be totally unresponsive to my commands.  
+i found it - i just miswired the column control header. hopefully that fixes many of the problems.
+and also it looks like i've partially miswired the row control header as well.
+
+[15 mins later]  
+ok, rewiring complete, and it looks like that helped a lot, but not all the way. going to keep messing with the test program.
+
+[15 mins later]  
+ok i think i've isolated the issue to the low side. (column 3 has a bad solder joint too, but that's not the main issue). for some reason, the shift register just isn't listening to me. i'm going to take a break, but I think the next step is to triple-check the pinout and then the datasheet if that doesn't work.
+
+**total time spent: 2.25 hours**
