@@ -311,8 +311,8 @@ Start time: 9:45pm
 
 time to solder the last 3 resistors, then i'll write some test code
 
-[30 mins later]
-resistors soldered! behold (but not too closely):
+[30 mins later]  
+resistors soldered! behold (but not too closely):  
 ![image](https://github.com/user-attachments/assets/02790142-4bb1-41dc-9155-b947c5dda2f9)
 
 ok tomorrow we wire it up and start testing!
