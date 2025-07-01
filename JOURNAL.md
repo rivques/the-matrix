@@ -340,3 +340,25 @@ ok, rewiring complete, and it looks like that helped a lot, but not all the way.
 ok i think i've isolated the issue to the low side. (column 3 has a bad solder joint too, but that's not the main issue). for some reason, the shift register just isn't listening to me. i'm going to take a break, but I think the next step is to triple-check the pinout and then the datasheet if that doesn't work.
 
 **total time spent: 2.25 hours**
+
+# July 1st, part 2:
+Start time: 6pm
+
+no apparent wiring issue. time to check the datasheet.  
+i see a problem! in the schematic, I mixed up RCK and SRCK (labeling them as ROWCLK and ROWLATCH instead of the other way around). Let me try swapping them back in my wiring...  
+progress! now one row of LEDs lights up!  
+AND IT ALMOST FULLY LIGHTS WHEN I RUN THE RIGHT TEST CODE!
+
+the one remaining issue is that COL3 isn't illuminating. I'm going to reflow the solder joints really quick and see if that helps.  
+it didn't fix it. Time to play more of everyone's favorite game "where's the voltage?"  
+...actually, i just reflowed the wrong joint. Reflowing the correct joint fixed it!
+
+ok, time to test some other stuff. First up: PWMing the ROWEN pin for global brightness control.  
+...yep, works perfectly.
+
+briefly, here's the current list of the various ways in which this is janky:
+- need to use 3D resistor technology to connect the low side shift registers
+- need to use display height jigs + solder from top to fit around the expansion ports
+- row latch and clock pins are the wrong way around on the schematic
+
+next: try to drive it in PIO, and hopefully fix some of the flickering i'm seeing which I assume is from micropython's garbage collection or similar.
