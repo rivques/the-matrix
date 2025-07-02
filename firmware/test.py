@@ -1,108 +1,28 @@
-from machine import Pin
+from machine import Pin, PWM
 import utime
+import rp2
 
-rowdat_pins = [Pin(i, Pin.OUT) for i in range(1)]
-coldat_pin = Pin(15, Pin.OUT)
-latch_pin = Pin(16, Pin.OUT)
-latch_pin.value(0)
-clear_pin = Pin(17, Pin.OUT) # active low
-clear_pin.value(1)
-rowclk_pin = Pin(18, Pin.OUT)
-rowclk_pin.value(0)
-colclk_pin = Pin(19, Pin.OUT)
-colclk_pin.value(0)
-rowen_pin = Pin(20, Pin.OUT)
-rowen_pin.value(0) # enable output for now
+SLOWDOWN_CONST = 1
 
-# clear registers
-clear_pin.value(0)
-utime.sleep_ms(2)
-clear_pin.value(1)
+# out_init is for 15xrowdat+coldat, set_init is latch, clear, rowclk, colclk
+@rp2.asm_pio(out_init=[rp2.PIO.OUT_LOW] * 16, set_init=[rp2.PIO.OUT_LOW, rp2.PIO.OUT_HIGH, rp2.PIO.OUT_LOW, rp2.PIO.OUT_LOW], autopull=True, fifo_join=rp2.PIO.JOIN_TX)
+def pio_disp_routine():
+    # this function shifts out a single column. It's expecting data to be constantly fed to it via DMA.
+    # It consumes 16-bit words (though the FIFO is filled in 32-bit mode), where the first 15 bits are row data and the last bit is column data.
+    # A single full column (120 pixels) is 16 bytes of data.
 
-# put a 1 in columns 0 and 1
-coldat_pin.value(1)
-utime.sleep_us(100)
-colclk_pin.value(1)
-utime.sleep_us(100)
-colclk_pin.value(0)
-utime.sleep_us(100)
-colclk_pin.value(1)
-utime.sleep_us(100)
-colclk_pin.value(0)
-utime.sleep_us(100)
-latch_pin.value(1)
-utime.sleep_us(100)
-latch_pin.value(0)
+    # Shift 8 times out to the row data pins, pulsing the row clock each time.
+    out(pins, 16).delay(1)
+    set(pins, 0b1100).delay(1) # just the first time, pulse the column clock
+    set(pins, 0b0000).delay(1) # once
 
-# parade a 1 across the rows
-while True:
-    rowdat_pins[0].value(1)
-    utime.sleep_us(100)
-    rowclk_pin.value(1)
-    utime.sleep_us(100)
-    rowclk_pin.value(0)
-    utime.sleep_us(100)
-    rowdat_pins[0].value(0)
-    utime.sleep_us(100)
-    latch_pin.value(1)
-    utime.sleep_us(100)
-    latch_pin.value(0)
-    for i in range(7):
-        # # run a 1 across the columns
-        # coldat_pin.value(0)
-        # utime.sleep_us(100)
-        # colclk_pin.value(1)
-        # utime.sleep_us(100)
-        # colclk_pin.value(0)
-        # utime.sleep_us(100)
-        # latch_pin.value(1)
-        # utime.sleep_us(100)
-        # latch_pin.value(0)
-        # coldat_pin.value(1)
-        # for j in range(7):
-        #     print(f"Row {i}, Column {j+1}")
-        #     colclk_pin.value(1)
-        #     utime.sleep_us(100)
-        #     colclk_pin.value(0)
-        #     utime.sleep_us(100)
-        #     latch_pin.value(1)
-        #     utime.sleep_us(100)
-        #     latch_pin.value(0)
-        #     utime.sleep_ms(500)
-        rowclk_pin.value(1)
-        utime.sleep_us(100)
-        rowclk_pin.value(0)
-        utime.sleep_ms(500)
-        print(f"Row {i+1} shifted out")
-    
+pio = rp2.StateMachine(0, pio_disp_routine, out_base=Pin(0), set_base=Pin(16), freq=10_000)
+pio.active(1)
 
-
-# shift ones through the columns
-coldat_pin.value(1)
-utime.sleep_us(100)
-for _ in range(len(rowdat_pins) * 8):
-    colclk_pin.value(1)
-    utime.sleep_us(100)
-    colclk_pin.value(0)
-    utime.sleep_us(100)
-latch_pin.value(1)
-utime.sleep_us(100)
-latch_pin.value(0)
-
-print("Initialized. Current state should be ROWEN high, ones on all 74HC595 outputs, so all row/col should be tristated from both sides.")
-print("Check that this is true:")
-utime.sleep(2)
-
-print("Setting columns to 0, should drive all cols HIGH. low side should still be tristated.")
-coldat_pin.value(0)
-for _ in range(len(rowdat_pins) * 8):
-    colclk_pin.value(1)
-    utime.sleep_us(10)
-    colclk_pin.value(0)
-    utime.sleep_us(10)
-latch_pin.value(1)
-utime.sleep_us(10)
-latch_pin.value(0)
-print("Confirm HIGH on columns:")
-while True:
-    pass
+try:
+    while True:
+        utime.sleep(1)
+except:
+    pio.active(0)
+    print("PIO deactivated.")
+    raise

@@ -362,3 +362,9 @@ briefly, here's the current list of the various ways in which this is janky:
 - row latch and clock pins are the wrong way around on the schematic
 
 next: try to drive it in PIO, and hopefully fix some of the flickering i'm seeing which I assume is from micropython's garbage collection or similar.
+
+... no luck on the first attempt at PIO, but there's so many things that could be wrong. I'm going to pare it down to a minimal example and build it back up.
+
+... ok i worked out a bunch of bugs. now the only thing left is something weird with the ring size parameter on the DMA. maybe i need to align the buffer to memory or smth? anyways its a problem for later. one thing that helped a lot was putting LEDs on most of the outputs so I could see what I was trying to do. then it was just a matter of tweaking the various parameters of the PIO stuff (set_init ordering, transfer size, byte swapping, etc.) until it worked.
+
+**total time spent: 2.5 hours**

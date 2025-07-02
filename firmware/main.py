@@ -1,7 +1,46 @@
-from machine import Pin, PWM
+from machine import Pin, PWM, freq
 import utime
+import rp2
 
+freq(18_000_000)  # Set the CPU frequency to 18 MHz for slow PIO
 SLOWDOWN_CONST = 1
+
+# out_init is for 15xrowdat+coldat, set_init is latch, clear, rowclk, colclk
+@rp2.asm_pio(out_init=[rp2.PIO.OUT_LOW] * 16, set_init=[rp2.PIO.OUT_LOW, rp2.PIO.OUT_HIGH, rp2.PIO.OUT_LOW, rp2.PIO.OUT_LOW], autopull=True, pull_thresh=16, fifo_join=rp2.PIO.JOIN_TX)
+def pio_disp_routine():
+    # this function shifts out a single column. It's expecting data to be constantly fed to it via DMA.
+    # It consumes 16-bit words (though the FIFO is filled in 32-bit mode), where the first 15 bits are row data and the last bit is column data.
+    # A single full column (120 pixels) is 16 bytes of data.
+
+    # Shift 8 times out to the row data pins, pulsing the row clock each time.
+    out(pins, 16).delay(31)
+    set(pins, 0b1110).delay(31) # just the first time, pulse the column clock
+    set(pins, 0b0010).delay(31) # once
+    out(pins, 16).delay(31)
+    set(pins, 0b0110).delay(31)
+    set(pins, 0b0010).delay(31) # twice
+    out(pins, 16).delay(31)
+    set(pins, 0b0110).delay(31)
+    set(pins, 0b0010).delay(31) # thrice
+    out(pins, 16).delay(31)
+    set(pins, 0b0110).delay(31)
+    set(pins, 0b0010).delay(31) # quadrice
+    out(pins, 16).delay(31)
+    set(pins, 0b0110).delay(31)
+    set(pins, 0b0010).delay(31) # quintice
+    out(pins, 16).delay(31)
+    set(pins, 0b0110).delay(31)
+    set(pins, 0b0010).delay(31) # sextice
+    out(pins, 16).delay(31)
+    set(pins, 0b0110).delay(31)
+    set(pins, 0b0010).delay(31) # septice
+    out(pins, 16).delay(31)
+    set(pins, 0b0110).delay(31)
+    set(pins, 0b0010).delay(31) # octice
+
+    # latch the data
+    set(pins, 0b0011).delay(31) # latch pin high
+    set(pins, 0b0010).delay(31) # latch pin low
 
 class Matrix:
     def __init__(self):
@@ -93,6 +132,56 @@ class Matrix:
             # disable output
             self.rowen_pin.duty_u16(65535)
             # print("Output disabled.")
+    
+    def display_pio(self, frame):
+        # configure the PIO to display the given frame.
+        # As a first step, convert the frame to the format PIO is expecting.
+        # The frame is given as a 2D list of bytes, where each top-level list is a column and each byte is 8 pixels in that column.
+        # The PIO expects 8 16-bit words per column, where each the LS 15 bits in row i are data for row % 8 == i in that column, and the MS bit is 1 at the first word in the column.\
+
+        pio_data = []
+        for col in range(len(frame)):
+            # runs once per column
+            words = [1 << 15] * 8 # 8 words per column
+            if col == 0:
+                words[0] = 0 # first column has a 0 in the MS bit of the first word
+
+            for word_num in range(len(words)):
+                # runs 8 times per column, once per PIO input word
+                for row_reg in range(15):
+                    # runs once per row shift register
+                    if row_reg < 1:
+                        bit = (frame[col][row_reg] & (1 << word_num)) != 0
+                    else:
+                        bit = 0 # we only have 1 row SR for now
+                    # put the bit in the correct position in the word    
+                    words[word_num] |= (bit << row_reg)
+            
+            # put each byte of each word in the PIO data array, little-endian
+            print(f"Words for column {col}:")
+            for word in words:
+                print(f"  {word:016b}", end=' ')
+                pio_data.append(word & 0xFF)
+                pio_data.append((word >> 8) & 0xFF)
+            print()
+        
+        raw_data = bytearray(pio_data*4)
+        print(f"Raw PIO data: {raw_data.hex()}")
+        self.pio = rp2.StateMachine(0, pio_disp_routine, out_base=self.rowdat_pins[0], set_base=self.latch_pin, freq=2400)
+        self.dma = rp2.DMA()
+        config = self.dma.pack_ctrl(
+            inc_write=False, # don't increment the write addr, we're writing to the peripheral
+            ring_size=8, # 16 bytes per column, 8 columns (TODO: increment 3 when more columns are added)
+            ring_sel=False, # increment the read address
+            treq_sel=0, # dreq on the TX FIFO of the first PIO state machine
+            size=1, # 16-bit transfers
+            bswap=False, # no byte swapping
+        )
+        self.pio.active(1)
+        self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=256)
+        self.dma.active(1)
+        
+
 
 matrix = Matrix()
 heart_frame = [
@@ -105,6 +194,19 @@ heart_frame = [
     [0b00110000],
     [0b00000000]
 ]
+matrix.rowen_pin.duty_u16(4000)
+matrix.display_pio(heart_frame)
+try:
+    while True:
+        utime.sleep_ms(500)
+        print(f"{matrix.pio.tx_fifo()} bytes on the TX FIFO")
+        print(f"State machine active: {matrix.pio.active()}")
+        print(f"DMA active: {matrix.dma.active()}")
 
-while True:
-    matrix.display_frame(heart_frame)
+except:
+    matrix.dma.active(0)
+    matrix.pio.active(0)
+    matrix.dma.close()
+    matrix.rowen_pin.duty_u16(65535)  # disable output
+    print("DMA and PIO deactivated.")
+    raise
