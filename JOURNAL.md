@@ -368,3 +368,22 @@ next: try to drive it in PIO, and hopefully fix some of the flickering i'm seein
 ... ok i worked out a bunch of bugs. now the only thing left is something weird with the ring size parameter on the DMA. maybe i need to align the buffer to memory or smth? anyways its a problem for later. one thing that helped a lot was putting LEDs on most of the outputs so I could see what I was trying to do. then it was just a matter of tweaking the various parameters of the PIO stuff (set_init ordering, transfer size, byte swapping, etc.) until it worked.
 
 **total time spent: 2.5 hours**
+
+# July 1st, part 3:
+Start time: 10:30pm
+
+Against my better judgment I'm going to keep working on this tonight. I have some ideas for how to fix the ring size issue.
+
+[30 mins later]  
+IT WORKS! like, fully works! the trick was to just have an interrupt run whenver the DMA write was done that immediately restarted it. I ran into some weirdness where the board refused to enumerate on USB once I uploaded the file, but a flash_nuke.uf2 fixed that. Now to see how far I can push the PIO frequency...  
+looks like 2MHz has some slight ghosting - like the rows stay on for a little while the next column is written, but 1MHz is fine. Working backwards, that equates to:
+```numbat
+let pio_clk = 1MHz
+let col_rate = pio_clk/52
+let full_bw_rate = col_rate/120
+    = 160 fps
+```
+That's... a little lower than I hoped. It means I might not be able to get any greyscale values without getting flickering. But there's definetly room for optimization, I bet if I adjust the timings in the PIO program I can figure out which delay is critical to eliminating ghosting and which I can speed up. Now, though, I think the next step is to solder up another matrix module and try to get two working together. This is looking really promising!
+
+**total time spent: 30 mins**
+**total time on July 1st: 5.25 hours**

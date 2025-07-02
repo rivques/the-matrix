@@ -2,7 +2,6 @@ from machine import Pin, PWM, freq
 import utime
 import rp2
 
-freq(18_000_000)  # Set the CPU frequency to 18 MHz for slow PIO
 SLOWDOWN_CONST = 1
 
 # out_init is for 15xrowdat+coldat, set_init is latch, clear, rowclk, colclk
@@ -13,34 +12,34 @@ def pio_disp_routine():
     # A single full column (120 pixels) is 16 bytes of data.
 
     # Shift 8 times out to the row data pins, pulsing the row clock each time.
-    out(pins, 16).delay(31)
-    set(pins, 0b1110).delay(31) # just the first time, pulse the column clock
-    set(pins, 0b0010).delay(31) # once
-    out(pins, 16).delay(31)
-    set(pins, 0b0110).delay(31)
-    set(pins, 0b0010).delay(31) # twice
-    out(pins, 16).delay(31)
-    set(pins, 0b0110).delay(31)
-    set(pins, 0b0010).delay(31) # thrice
-    out(pins, 16).delay(31)
-    set(pins, 0b0110).delay(31)
-    set(pins, 0b0010).delay(31) # quadrice
-    out(pins, 16).delay(31)
-    set(pins, 0b0110).delay(31)
-    set(pins, 0b0010).delay(31) # quintice
-    out(pins, 16).delay(31)
-    set(pins, 0b0110).delay(31)
-    set(pins, 0b0010).delay(31) # sextice
-    out(pins, 16).delay(31)
-    set(pins, 0b0110).delay(31)
-    set(pins, 0b0010).delay(31) # septice
-    out(pins, 16).delay(31)
-    set(pins, 0b0110).delay(31)
-    set(pins, 0b0010).delay(31) # octice
+    out(pins, 16).delay(1)
+    set(pins, 0b1110).delay(1) # just the first time, pulse the column clock
+    set(pins, 0b0010).delay(1) # once
+    out(pins, 16).delay(1)
+    set(pins, 0b0110).delay(1)
+    set(pins, 0b0010).delay(1) # twice
+    out(pins, 16).delay(1)
+    set(pins, 0b0110).delay(1)
+    set(pins, 0b0010).delay(1) # thrice
+    out(pins, 16).delay(1)
+    set(pins, 0b0110).delay(1)
+    set(pins, 0b0010).delay(1) # quadrice
+    out(pins, 16).delay(1)
+    set(pins, 0b0110).delay(1)
+    set(pins, 0b0010).delay(1) # quintice
+    out(pins, 16).delay(1)
+    set(pins, 0b0110).delay(1)
+    set(pins, 0b0010).delay(1) # sextice
+    out(pins, 16).delay(1)
+    set(pins, 0b0110).delay(1)
+    set(pins, 0b0010).delay(1) # septice
+    out(pins, 16).delay(1)
+    set(pins, 0b0110).delay(1)
+    set(pins, 0b0010).delay(1) # octice
 
     # latch the data
-    set(pins, 0b0011).delay(31) # latch pin high
-    set(pins, 0b0010).delay(31) # latch pin low
+    set(pins, 0b0011).delay(1) # latch pin high
+    set(pins, 0b0010).delay(1) # latch pin low
 
 class Matrix:
     def __init__(self):
@@ -54,7 +53,7 @@ class Matrix:
         self.rowclk_pin.value(0)
         self.colclk_pin = Pin(19, Pin.OUT)
         self.colclk_pin.value(0)
-        self.rowen_pin = PWM(Pin(20, Pin.OUT), freq=100_000, duty_u16=0)
+        self.rowen_pin = PWM(Pin(20, Pin.OUT), freq=10_000_000, duty_u16=0)
         self.rowen_pin.duty_u16(65535) # disable output for now
         self.brightness = 0.5
 
@@ -165,23 +164,24 @@ class Matrix:
                 pio_data.append((word >> 8) & 0xFF)
             print()
         
-        raw_data = bytearray(pio_data*4)
+        raw_data = bytearray(pio_data)
         print(f"Raw PIO data: {raw_data.hex()}")
-        self.pio = rp2.StateMachine(0, pio_disp_routine, out_base=self.rowdat_pins[0], set_base=self.latch_pin, freq=2400)
+        self.pio = rp2.StateMachine(0, pio_disp_routine, out_base=self.rowdat_pins[0], set_base=self.latch_pin, freq=2_000_000)
         self.dma = rp2.DMA()
         config = self.dma.pack_ctrl(
             inc_write=False, # don't increment the write addr, we're writing to the peripheral
-            ring_size=8, # 16 bytes per column, 8 columns (TODO: increment 3 when more columns are added)
-            ring_sel=False, # increment the read address
+            # ring_size=8, # 16 bytes per column, 8 columns (TODO: increment 3 when more columns are added)
+            # ring_sel=False, # increment the read address
             treq_sel=0, # dreq on the TX FIFO of the first PIO state machine
             size=1, # 16-bit transfers
             bswap=False, # no byte swapping
+            irq_quiet=False, # irq on completion
         )
+        self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=64)
+        self.dma.irq(lambda _: self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=64, trigger=True))
         self.pio.active(1)
-        self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=256)
         self.dma.active(1)
         
-
 
 matrix = Matrix()
 heart_frame = [
@@ -194,7 +194,7 @@ heart_frame = [
     [0b00110000],
     [0b00000000]
 ]
-matrix.rowen_pin.duty_u16(4000)
+matrix.rowen_pin.duty_u16(50_000)
 matrix.display_pio(heart_frame)
 try:
     while True:
