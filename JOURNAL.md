@@ -4,7 +4,7 @@ author: "rivques"
 description: "A large LED matrix to display things like the time, weather, sports scores, etc."
 created_at: "2025-05-27"
 ---
-## total time so far: 17 hours
+## total time thru end of May: 17 hours
 # May 27th:
 Ok so this is something I've wanted to make for a while: a kind of "super-clock" that shows not just the time but also other relevant information. Initially I wanted to use flip-dot displays, but those are expensive and hard to find, so I'm pivoting to an LED matrix. I want to put a bunch of [these cheap 8x8 displays](https://www.aliexpress.us/item/2251832771187101.html) together, right now I'm thinking 30x30cm, which is 15x15=225 displays or 120x120=1440 pixels. The raw cost of those displays would be ~$80. I'm trying to figure out driver ICs. Ideally I'd like to solder everything myself, with no tiny SMD parts. One option is a bunch (30-450) of 74HC595s, depending on how many displays I want to be able to control at once. Let's take a second to do the math of how many LEDs/second I need to update to get, say, 10fps:
 ```numbat
@@ -387,3 +387,23 @@ That's... a little lower than I hoped. It means I might not be able to get any g
 
 **total time spent: 30 mins**
 **total time on July 1st: 5.25 hours**
+
+# July 2nd
+Start time: 3:30 pm
+
+OK with yesterday's success I'm going to solder the rest of the high-side components to expand to a 8x40 display.
+
+[1 hour later]
+
+that was 32 transistors, 4 shift registers, and 4 displays in ~1 hour, or a little under 4 joints per minute. That's a bit slow, but hopefully working in bigger batches will help.
+
+Now, i'm going to adjust the code to account for the 32 new columns, which should be pretty trivial
+
+[1.25 hours later]
+...it was not pretty trivial. there were a few solder joints i needed to reflow, but then micropython started being weird - like claiming the pio was running, then not actually running it except for the 0.1secs when i pressed ctrl+c, and disconnecting from the repl fixed the issue.
+
+[15 mins later]
+
+i spent some time trying to make a function to draw a framebuf on the screen, but i had a bad approach. i'll try again later.
+
+**total time spent: 2.5 hours**

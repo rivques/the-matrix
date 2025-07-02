@@ -2,7 +2,9 @@ from machine import Pin, PWM, freq
 import utime
 import rp2
 
+#freq(25_000_000)  # Set the CPU frequency to 18 MHz for better timing control
 SLOWDOWN_CONST = 1
+NUM_COLS = 40
 
 # out_init is for 15xrowdat+coldat, set_init is latch, clear, rowclk, colclk
 @rp2.asm_pio(out_init=[rp2.PIO.OUT_LOW] * 16, set_init=[rp2.PIO.OUT_LOW, rp2.PIO.OUT_HIGH, rp2.PIO.OUT_LOW, rp2.PIO.OUT_LOW], autopull=True, pull_thresh=16, fifo_join=rp2.PIO.JOIN_TX)
@@ -64,7 +66,7 @@ class Matrix:
 
         # shift ones through the columns
         self.coldat_pin.value(1)
-        for _ in range(len(self.rowdat_pins) * 8):
+        for _ in range(NUM_COLS):
             self.colclk_pin.value(1)
             utime.sleep_us(10)
             self.colclk_pin.value(0)
@@ -132,7 +134,7 @@ class Matrix:
             self.rowen_pin.duty_u16(65535)
             # print("Output disabled.")
     
-    def display_pio(self, frame):
+    def display_pio(self, frame, pio_freq):
         # configure the PIO to display the given frame.
         # As a first step, convert the frame to the format PIO is expecting.
         # The frame is given as a 2D list of bytes, where each top-level list is a column and each byte is 8 pixels in that column.
@@ -166,7 +168,7 @@ class Matrix:
         
         raw_data = bytearray(pio_data)
         print(f"Raw PIO data: {raw_data.hex()}")
-        self.pio = rp2.StateMachine(0, pio_disp_routine, out_base=self.rowdat_pins[0], set_base=self.latch_pin, freq=2_000_000)
+        self.pio = rp2.StateMachine(0, pio_disp_routine, out_base=self.rowdat_pins[0], set_base=self.latch_pin, freq=pio_freq)
         self.dma = rp2.DMA()
         config = self.dma.pack_ctrl(
             inc_write=False, # don't increment the write addr, we're writing to the peripheral
@@ -177,14 +179,15 @@ class Matrix:
             bswap=False, # no byte swapping
             irq_quiet=False, # irq on completion
         )
-        self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=64)
-        self.dma.irq(lambda _: self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=64, trigger=True))
+        self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=8*NUM_COLS, trigger=False)
+        self.dma.irq(lambda _: self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=8*NUM_COLS, trigger=True), hard=True)
         self.pio.active(1)
         self.dma.active(1)
         
 
 matrix = Matrix()
-heart_frame = [
+frame = [
+    # heart
     [0b00110000],
     [0b01111000],
     [0b01111100],
@@ -192,16 +195,56 @@ heart_frame = [
     [0b01111100],
     [0b01111000],
     [0b00110000],
-    [0b00000000]
+    [0b00000000],
+    # smiley
+    [0b01111110],
+    [0b11001011],
+    [0b11111101],
+    [0b11111101],
+    [0b11111101],
+    [0b11111101],
+    [0b11001011],
+    [0b01111110],
+    # inverted heart
+    [0b11001111],
+    [0b10000111],
+    [0b10000011],
+    [0b11000001],
+    [0b10000011],
+    [0b10000111],
+    [0b11001111],
+    [0b11111111],
+    # 1px checkerboard
+    [0b10101010],
+    [0b01010101],
+    [0b10101010],
+    [0b01010101],
+    [0b10101010],
+    [0b01010101],
+    [0b10101010],
+    [0b01010101],
+    # 2px checkerboard
+    [0b11001100],
+    [0b11001100],
+    [0b00110011],
+    [0b00110011],
+    [0b11001100],
+    [0b11001100],
+    [0b00110011],
+    [0b00110011],  
 ]
-matrix.rowen_pin.duty_u16(50_000)
-matrix.display_pio(heart_frame)
+matrix.rowen_pin.duty_u16(32000)
+
+pio_freq = 400_000  # PIO frequency
+matrix.display_pio(frame, pio_freq)
 try:
     while True:
         utime.sleep_ms(500)
         print(f"{matrix.pio.tx_fifo()} bytes on the TX FIFO")
         print(f"State machine active: {matrix.pio.active()}")
         print(f"DMA active: {matrix.dma.active()}")
+        print(f"Processor frequency: {freq()} Hz")
+        print(f"PIO frequency: {pio_freq} Hz")
 
 except:
     matrix.dma.active(0)
