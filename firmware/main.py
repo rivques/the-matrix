@@ -2,7 +2,9 @@ from machine import Pin, PWM, freq
 import utime
 import rp2
 import framebuf
-
+import gc
+import micropython
+from array import array
 #freq(25_000_000)  # Set the CPU frequency to 18 MHz for better timing control
 SLOWDOWN_CONST = 1
 NUM_COLS = 40
@@ -62,7 +64,59 @@ def get_coords_8x8local(x, y):
     local_x = x % 8
     local_y = y % 8
     return local_x, local_y
-    
+
+print("Generating coordinate transformation LUT...")
+start_time = utime.ticks_ms()
+def coord_xform(x, y):
+    # TODO: handle row interlacing on alternating modules
+
+    # 8x8-specific rotations
+    x_8x8_mod, y_8x8_mod = get_8x8_coords_modlocal(x, y)
+    x_8x8_local, y_8x8_local = get_coords_8x8local(x, y)
+    # 1-3: rotate 90 clockwise in its 8x8 grid
+    # NOTE: this breaks on rows > 40, but works for now
+    if y_8x8_mod >= 1 and y_8x8_mod <= 3:
+        x = x_8x8_mod * 8 + (7 - y_8x8_local)
+        y = y_8x8_mod * 8 + x_8x8_local
+    # 4: rotate 180 degrees in its 8x8 grid
+    elif y_8x8_mod == 4:
+        x = x_8x8_mod * 8 + (7 - x_8x8_local)
+        y = y_8x8_mod * 8 + (7 - y_8x8_local)     
+
+    return y * 120 + x
+
+coord_xform_lut = array('H')
+for x in range(120):
+    for y in range(120):
+        coord_xform_lut.append(coord_xform(x, y))
+print(f"Generated coordinate transformation LUT in {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
+
+@micropython.native
+def compute_frame(pio_data, buffer):
+    raw_pix_idx = 0
+    for col in range(120):
+        words = array('H', [0 if col == 0 else 0x8000, 0x8000, 0x8000, 0x8000, 0x8000, 0x8000, 0x8000, 0x8000])  # 8 words per column
+        # if col == 0:
+        #     postarray = utime.ticks_us()
+            
+        for row_reg in range(15):
+            # runs once per row shift register
+            for word_num in range(8):
+                # runs 8 (times 15) times per column, once per PIO input word
+                # figure out which coordinates we actually want data for
+                pix_idx = coord_xform_lut[raw_pix_idx] # col + (row_reg * 8 + word_num) * 120] # y = (row_reg * 8 + word_num)
+                
+                bit = (buffer[pix_idx // 8] & (1 << pix_idx % 8)) >> pix_idx % 8
+                # put the bit in the correct position in the word
+                words[word_num] |= (bit << row_reg)
+                raw_pix_idx += 1
+
+        # if col == 0:
+        #     postwordgen = utime.ticks_us()
+        # put each byte of each word in the PIO data array, little-endian
+        pio_data.extend(words)
+        # if col == 0:
+        #     postextend = utime.ticks_us()
 
 class Matrix:
     def __init__(self):
@@ -209,55 +263,26 @@ class Matrix:
         # display a frame buffer using PIO
         # the buffer is a linear list of bytes, where each byte represents 8 pixels in a row, and the LSB is the rightmost pixel in an 8-pixel row (MONO_HLSB format).
         # the PIO expects 8 16-bit words per column, where each the LS 15 bits in row i are data for row % 8 == i in that column, and the MS bit is 1 at the first word in the column.
-        start_time = utime.ticks_ms()
-
-        def coord_xform(x, y):
-            # TODO: handle row interlacing on alternating modules
-
-            # 8x8-specific rotations
-            x_8x8_mod, y_8x8_mod = get_8x8_coords_modlocal(x, y)
-            x_8x8_local, y_8x8_local = get_coords_8x8local(x, y)
-            # 1-3: rotate 90 clockwise in its 8x8 grid
-            # NOTE: this breaks on rows > 40, but works for now
-            if y_8x8_mod >= 1 and y_8x8_mod <= 3:
-                x = x_8x8_mod * 8 + (7 - y_8x8_local)
-                y = y_8x8_mod * 8 + x_8x8_local
-            # 4: rotate 180 degrees in its 8x8 grid
-            elif y_8x8_mod == 4:
-                x = x_8x8_mod * 8 + (7 - x_8x8_local)
-                y = y_8x8_mod * 8 + (7 - y_8x8_local)     
-
-            return x, y
         
-        pio_data = []
-        for col in range(120):
-            # runs once per column
-            words = [1 << 15] * 8 # 8 words per column
-            if col == 0:
-                words[0] = 0 # first column has a 0 in the MS bit of the first word
+        start_time = utime.ticks_ms()
+        print(f"free memory before preparing PIO data: {gc.mem_free()//1024} KiB")
+        gc.collect()  # collect garbage to free up memory
+        print(f"free memory after garbage collection: {gc.mem_free()//1024} KiB")
 
-            for word_num in range(8):
-                # runs 8 times per column, once per PIO input word
-                for row_reg in range(15):
-                    # runs once per row shift register
-                    # figure out which coordinates we actually want data for
-                    x = col
-                    y = (row_reg * 8 + word_num)
+        pio_data = array('H', [])  # use an array of unsigned shorts for PIO data
+        compute_frame(pio_data, buffer)
 
-                    x, y = coord_xform(x, y)
-
-                    buffer_index = y * 15 + x // 8 # each row down is 15 bytes, each byte contains 8 columns
-                    byte_subindex = x % 8 # which bit in the byte we want
-                    bit = (buffer[buffer_index] & (1 << byte_subindex)) != 0
-                    # put the bit in the correct position in the word
-                    words[word_num] |= (bit << row_reg)
-            # put each byte of each word in the PIO data array, little-endian
-            for word in words:
-                pio_data.append(word & 0xFF)
-                pio_data.append((word >> 8) & 0xFF)
+        # start_us = utime.ticks_us()
+        # postarray=0
+        # postwordgen=0
+        # postextend=0
+        
+        # print(f"Col 0 prep times: array={utime.ticks_diff(postarray, start_us)} us, wordgen={utime.ticks_diff(postwordgen, postarray)} us, extend={utime.ticks_diff(postextend, postwordgen)} us, total={utime.ticks_diff(postextend, start_us)} us")
+        print(f"Free memory after preparing PIO data: {gc.mem_free()//1024} KiB")
+        gc.collect()  # collect garbage to free up memory
+        print(f"Free memory after garbage collection: {gc.mem_free()//1024} KiB")
         print(f"Time to prepare PIO data: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
-        raw_data = bytearray(pio_data)
-        print(f"Raw PIO data: {raw_data.hex()}")
+        print(f"Raw PIO data: {memoryview(pio_data).hex()}")
         self.pio = rp2.StateMachine(0, pio_disp_routine, out_base=self.rowdat_pins[0], set_base=self.latch_pin, freq=pio_freq)
         print(f"time to create PIO state machine: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
         self.dma = rp2.DMA()
@@ -270,8 +295,8 @@ class Matrix:
             bswap=False, # no byte swapping
             irq_quiet=False, # irq on completion
         )
-        self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=len(raw_data)//2, trigger=False)
-        self.dma.irq(lambda _: self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=len(raw_data)//2, trigger=True), hard=True)
+        self.dma.config(read=pio_data, write=self.pio, ctrl=config, count=len(pio_data), trigger=False)
+        self.dma.irq(lambda _: self.dma.config(read=pio_data, write=self.pio, ctrl=config, count=len(pio_data), trigger=True), hard=True)
         print(f"time to configure DMA: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
         self.pio.active(1)
         self.dma.active(1)

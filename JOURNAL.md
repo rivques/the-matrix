@@ -436,3 +436,12 @@ here's what it looks like now:
 
 
 **total time spent: 6 hours**
+
+# July 10th:
+start time: 11:30am
+
+I'm trying to optimize the frame computation. So far I've gotten it from 1700ms to 450ms by precomputing the transformation from display x/y space to bit in framebuf. I shaved off another 50ms by adjusting for loops to move through the LUT sequentially. Finally, I got down to ~325ms by using the `@micropython.native` decorator, which is very cool. I might be able to get a little more if I made the function work with the `viper` optimizing compiler. I think that's the end of the easy wins, though. If I want, say, 50ms, then each pixel would only get 7 instructions to deal with, and that's if I overclocked to 200MHz. That seems unfeasible. Part of what makes this difficult is that it's hard to operate on more than 1 bit at a time. I can't operate on, say a byte of the framebuf (an 8-pixel row of the display) at a time, because the PIO needs column-first indexing, so I'd span 8 columns. Even if I switched the framebuffer format to column-first, I'd still have issues because adjacent pixels end up in separate PIO words. I think maybe I need to admit that I won't get realistic realtime frame computation, so I'll need to precompute frames that need to play at more than 2fps. That'll cost (16 bytes per column * 120 columns) = a little under 2 KiB per frame. With a `gc.collect()`, the board reports ~160 KiB free, or 80 frames. Not sure how much of that will end up taken by the networking stack, but even so, I can't think of many clock faces that would even need precomputation, and those that do wouldn't need more than ~10. So this should be fine.
+
+As an aside, I'm getting an understanding for how a GPU gets its speedup. This pixel-by-pixel work is so succeptible to parallelization (on a per-column basis at the very least), but I don't have 120 cores handy to do it.
+
+**total time spent: 1 hour**
