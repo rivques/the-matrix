@@ -1,6 +1,7 @@
 from machine import Pin, PWM, freq
 import utime
 import rp2
+import framebuf
 
 #freq(25_000_000)  # Set the CPU frequency to 18 MHz for better timing control
 SLOWDOWN_CONST = 1
@@ -42,6 +43,26 @@ def pio_disp_routine():
     # latch the data
     set(pins, 0b0011).delay(1) # latch pin high
     set(pins, 0b0010).delay(1) # latch pin low
+
+def get_modcoords(x, y):
+    # get the coordinates of the module that contains this pixel
+    # each module is 40x40
+    mod_x = x // 40
+    mod_y = y // 40
+    return mod_x, mod_y
+
+def get_8x8_coords_modlocal(x, y):
+    # get the coordinates of the 8x8 module that contains this pixel, relative to the module of the pixel
+    local_x = x % 40
+    local_y = y % 40
+    return local_x // 8, local_y // 8
+
+def get_coords_8x8local(x, y):
+    # get the coordinates of the 8x8 module that contains this pixel, relative to the 8x8 module
+    local_x = x % 8
+    local_y = y % 8
+    return local_x, local_y
+    
 
 class Matrix:
     def __init__(self):
@@ -183,60 +204,106 @@ class Matrix:
         self.dma.irq(lambda _: self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=8*NUM_COLS, trigger=True), hard=True)
         self.pio.active(1)
         self.dma.active(1)
+    
+    def display_pio_framebuf(self, buffer, pio_freq):
+        # display a frame buffer using PIO
+        # the buffer is a linear list of bytes, where each byte represents 8 pixels in a row, and the LSB is the rightmost pixel in an 8-pixel row (MONO_HLSB format).
+        # the PIO expects 8 16-bit words per column, where each the LS 15 bits in row i are data for row % 8 == i in that column, and the MS bit is 1 at the first word in the column.
+        start_time = utime.ticks_ms()
+
+        def coord_xform(x, y):
+            # TODO: handle row interlacing on alternating modules
+
+            # 8x8-specific rotations
+            x_8x8_mod, y_8x8_mod = get_8x8_coords_modlocal(x, y)
+            x_8x8_local, y_8x8_local = get_coords_8x8local(x, y)
+            # 1-3: rotate 90 clockwise in its 8x8 grid
+            # NOTE: this breaks on rows > 40, but works for now
+            if y_8x8_mod >= 1 and y_8x8_mod <= 3:
+                x = x_8x8_mod * 8 + (7 - y_8x8_local)
+                y = y_8x8_mod * 8 + x_8x8_local
+            # 4: rotate 180 degrees in its 8x8 grid
+            elif y_8x8_mod == 4:
+                x = x_8x8_mod * 8 + (7 - x_8x8_local)
+                y = y_8x8_mod * 8 + (7 - y_8x8_local)     
+
+            return x, y
+        
+        pio_data = []
+        for col in range(120):
+            # runs once per column
+            words = [1 << 15] * 8 # 8 words per column
+            if col == 0:
+                words[0] = 0 # first column has a 0 in the MS bit of the first word
+
+            for word_num in range(8):
+                # runs 8 times per column, once per PIO input word
+                for row_reg in range(15):
+                    # runs once per row shift register
+                    # figure out which coordinates we actually want data for
+                    x = col
+                    y = (row_reg * 8 + word_num)
+
+                    x, y = coord_xform(x, y)
+
+                    buffer_index = y * 15 + x // 8 # each row down is 15 bytes, each byte contains 8 columns
+                    byte_subindex = x % 8 # which bit in the byte we want
+                    bit = (buffer[buffer_index] & (1 << byte_subindex)) != 0
+                    # put the bit in the correct position in the word
+                    words[word_num] |= (bit << row_reg)
+            # put each byte of each word in the PIO data array, little-endian
+            for word in words:
+                pio_data.append(word & 0xFF)
+                pio_data.append((word >> 8) & 0xFF)
+        print(f"Time to prepare PIO data: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
+        raw_data = bytearray(pio_data)
+        print(f"Raw PIO data: {raw_data.hex()}")
+        self.pio = rp2.StateMachine(0, pio_disp_routine, out_base=self.rowdat_pins[0], set_base=self.latch_pin, freq=pio_freq)
+        print(f"time to create PIO state machine: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
+        self.dma = rp2.DMA()
+        config = self.dma.pack_ctrl(
+            inc_write=False, # don't increment the write addr, we're writing to the peripheral
+            # ring_size=8, # 16 bytes per column, 8 columns (TODO: increment 3 when more columns are added)
+            # ring_sel=False, # increment the read address
+            treq_sel=0, # dreq on the TX FIFO of the first PIO state machine
+            size=1, # 16-bit transfers
+            bswap=False, # no byte swapping
+            irq_quiet=False, # irq on completion
+        )
+        self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=len(raw_data)//2, trigger=False)
+        self.dma.irq(lambda _: self.dma.config(read=raw_data, write=self.pio, ctrl=config, count=len(raw_data)//2, trigger=True), hard=True)
+        print(f"time to configure DMA: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
+        self.pio.active(1)
+        self.dma.active(1)
+        print(f"time to activate PIO and DMA: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
+
         
 
 matrix = Matrix()
-frame = [
-    # heart
-    [0b00110000],
-    [0b01111000],
-    [0b01111100],
-    [0b00111110],
-    [0b01111100],
-    [0b01111000],
-    [0b00110000],
-    [0b00000000],
-    # smiley
-    [0b01111110],
-    [0b11001011],
-    [0b11111101],
-    [0b11111101],
-    [0b11111101],
-    [0b11111101],
-    [0b11001011],
-    [0b01111110],
-    # inverted heart
-    [0b11001111],
-    [0b10000111],
-    [0b10000011],
-    [0b11000001],
-    [0b10000011],
-    [0b10000111],
-    [0b11001111],
-    [0b11111111],
-    # 1px checkerboard
-    [0b10101010],
-    [0b01010101],
-    [0b10101010],
-    [0b01010101],
-    [0b10101010],
-    [0b01010101],
-    [0b10101010],
-    [0b01010101],
-    # 2px checkerboard
-    [0b11001100],
-    [0b11001100],
-    [0b00110011],
-    [0b00110011],
-    [0b11001100],
-    [0b11001100],
-    [0b00110011],
-    [0b00110011],  
-]
+
+buf_raw = bytearray(120 * 120 // 8) # 120x120 pixels, 8 pixels per byte
+fbuf = framebuf.FrameBuffer(buf_raw, 120, 120, framebuf.MONO_HLSB)
+
+fbuf.fill(1)  # Clear the frame buffer
+fbuf.text("12345", 0, 0, 0)
+fbuf.text("67890", 0, 8, 0)
+fbuf.text("ABCDE", 0, 16, 0)
+fbuf.text("FGHIJ", 0, 24, 0)
+fbuf.text("KLMNO", 0, 32, 0)
+
+# print out the framebuffer
+print("Frame buffer content:")
+for y in range(40):
+    row_data = []
+    for x in range(40):
+        byte = fbuf.pixel(x, y)
+        row_data.append("#" if byte else ".")
+    print("".join(row_data))
+
 matrix.rowen_pin.duty_u16(32000)
 
 pio_freq = 400_000  # PIO frequency
-matrix.display_pio(frame, pio_freq)
+matrix.display_pio_framebuf(buf_raw, pio_freq)
 try:
     while True:
         utime.sleep_ms(500)

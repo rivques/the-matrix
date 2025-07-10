@@ -407,3 +407,31 @@ Now, i'm going to adjust the code to account for the 32 new columns, which shoul
 i spent some time trying to make a function to draw a framebuf on the screen, but i had a bad approach. i'll try again later.
 
 **total time spent: 2.5 hours**
+
+# July 9th:
+Start time: 1pm
+
+The goal for today is to get one full module working. So I need to solder:
+- U7-U10 (with outputs cut)
+- J5 and J6
+- DS10-DS25
+- R9-R40
+
+[4 hours later]
+
+soldering complete! again, the resistors were incredibly annoying. I do think it won't be _that_ bad to solder the non-row-control modules.
+
+Going to update the code to use a 40x40 display, and see how it works.
+
+[1 hour later]
+
+updated the code, and it mostly works! there's a few display joints that need reflowing, some of which will be a massive pain to reach, but by and large it works! next: figuring out what transform each display needs to be in the right place. 
+
+[another hour later]
+
+got all the pins reflowed! there's some glitchiness with some pixels flickering, not sure why that is yet. my next step is probably to try and optimize the framebuf->pio data step - right now it takes 1700ms(!) and if i can get that to like <50ms then I can do some animations.
+
+here's what it looks like now:
+
+
+**total time spent: 6 hours**
