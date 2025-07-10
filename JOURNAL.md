@@ -431,7 +431,8 @@ updated the code, and it mostly works! there's a few display joints that need re
 
 got all the pins reflowed! there's some glitchiness with some pixels flickering, not sure why that is yet. my next step is probably to try and optimize the framebuf->pio data step - right now it takes 1700ms(!) and if i can get that to like <50ms then I can do some animations.
 
-here's what it looks like now:
+here's what it looks like now:  
+![image](https://github.com/user-attachments/assets/aad71cca-ffee-4487-9617-ec89d40b00de)
 
 
 **total time spent: 6 hours**
