@@ -445,3 +445,18 @@ I'm trying to optimize the frame computation. So far I've gotten it from 1700ms 
 As an aside, I'm getting an understanding for how a GPU gets its speedup. This pixel-by-pixel work is so succeptible to parallelization (on a per-column basis at the very least), but I don't have 120 cores handy to do it.
 
 **total time spent: 1 hour**
+
+# July 22nd:
+Start time: 11am
+
+Getting back to this project after Undercity, I'm going to solder another display module, to be attached horizontally. This means I'll need to solder:
+- U1-U5
+- J2, J4-J6
+- Q1-Q40
+- DS1-DS25
+
+[2 hours later]
+
+I finished the module! I haven't tested it yet, though. It looks like I didn't quite judge the spacing right on the inter-module connectors, there's ~1px of space between modules. Also, I was doing some more theorizing about the max frame computation speed - that 7 cyc/pixel number is way off, at 50ms frame times it's more like 350cyc/px, which is much more manageable.
+
+**total time spent: 2 hours**
