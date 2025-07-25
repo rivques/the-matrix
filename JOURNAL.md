@@ -489,7 +489,9 @@ i'm going to have to do splices for the main lines, there's no way i'm running 5
 ok time to go sketch 
 
 something like this?
-[image goes here]
+
+<img width="1110" height="1090" alt="image" src="https://github.com/user-attachments/assets/9ba811d5-a59b-4479-b5ab-75013e340e17" />
+
 
 not sure how i'm going to mount these yet. maybe i'll make a backplane that uses the gap between modules and hooks onto the connectors? btw i weighed a module and it was 144g.
 
