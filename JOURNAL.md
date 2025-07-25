@@ -460,3 +460,47 @@ Getting back to this project after Undercity, I'm going to solder another displa
 I finished the module! I haven't tested it yet, though. It looks like I didn't quite judge the spacing right on the inter-module connectors, there's ~1px of space between modules. Also, I was doing some more theorizing about the max frame computation speed - that 7 cyc/pixel number is way off, at 50ms frame times it's more like 350cyc/px, which is much more manageable.
 
 **total time spent: 2 hours**
+
+# July 23rd:
+Start time: 1:30pm
+
+Going to see if the new module works.
+
+[30 mins later]
+
+ok i keep trying to wire these jumpers onto a breadboard and it's so messy and i keep miswiring things. i'm going to start on the control board for the real thing so i can do the wiring once and for all.
+
+ok so here are the connections:
+
+pin | # connections
+---|---
+5V | 6-12
+GND | 12-18 (bc colen is pulled low)
+CLR | 6
+LATCH | 6
+ROWEN | 3
+ROWCLK | 3
+COLCLK | 3
+COLDAT | 1
+ROWDAT0-14 | 1 each
+
+i'm going to have to do splices for the main lines, there's no way i'm running 50 wires back to a control box.
+
+ok time to go sketch 
+
+something like this?
+[image goes here]
+
+not sure how i'm going to mount these yet. maybe i'll make a backplane that uses the gap between modules and hooks onto the connectors? btw i weighed a module and it was 144g.
+
+oh also maybe i could use those 40-pin connectors i have for the connections to the controller?
+
+** total time spent: 1 hour**
+
+# July 24th:
+Start time: 12:30pm
+
+Going to design the wiring harness that will connect the modules to the controller. 
+So the row harness will run vertically down the side of the display and will carry 22 wires. It'll connect to the controller with a spare 2x20 header, and will branch into three 1x12 headers for the three rows. The following lines will be spliced so all modules share them: 5V, ROWCLK, CLEAR, LATCH, ROWEN, and 2xGND. Then each connector will also get 5 ROWDAT lines. The column harness will have a similar, but simpler structure. It'll connect to the controller with a 1x8 header, and will branch into three 1x10 headers for the three columns. The following lines will be spliced so all modules share them: 2x5V, COLCLK, CLEAR, LATCH, and GND. The COLDAT line will be daisy-chained along the harness. The COLEN pin will be tied to the other GND pin at the header. 
+
+**total time spent: 30 mins**
