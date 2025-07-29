@@ -84,7 +84,7 @@ ok, i'm about 30 mins in, and its becoming clear that i have to rotate the top a
 
 ok now for the (hopefully easier!) task of shoving all the ics and mosfets under the displays.
 
-...and i'm realizing that there's no way to do this without 4 layers. fortunately it's not that much mroe expensive.
+...and i'm realizing that there's no way to do this without 4 layers. fortunately it's not that much mre expensive.
 
 30 more minutes later, these mosfets are just way too big. i'm going to switch to the [IRFU9024NPBF](https://www.aliexpress.us/item/2251832086805199.htm), which is actually cheaper than my original option, and it's in the smaller TO-251 package.
 
@@ -210,44 +210,6 @@ Part|Quantity|Price/unit|Total price|# pins/unit|# pins total|Note|Link
 74HC595 Shift Register|15|$0.22|$4.00|16|240|2x20 is cheaper than 3x5|https://www.aliexpress.us/item/3256807421796895.html
 TPIC6B595 Shift Register|20|$0.50|$10|16|240|again, not counting on no DoA|https://www.aliexpress.us/item/3256806981485001.html
 IRFU9024NPBF MOSFET|130|$0.40|$50.00|3|360||https://www.aliexpress.us/item/3256806868594722.html
-220Ω Resistor|120|
-
-wait
-
-waiittttttt
-
-i forgot the current-limiting resistors.
-
-time to go back to routing hell (:
-
-ok wait can i get away without them  
-so the mosfets will source up to like 1.5A/col  
-and the tpic6b595s will sink 150mA/row  
-and the max current per led is 20mA  
-yeahhhhh  
-
-ok next idea: can i avoid putting the resistors on the board using the third dimension  
-like can i directly solder one leg to the drain pin of the tpic, and then solder the other leg to the pad where that drain pin is meant to go  
-the datasheet says the legs extend 1/8th inch below the body,
-so... maybe?
-uhh let me try this with a different DIP part
-
-
-ok after experimenting a bit i dont think that's feasible. but maybe i could solder a resistor to the chip, then solder the other leg to somewhere else where the net is connected (i.e. onto one of the matrix legs).  
-looking at the pcb, the farthest distance that would be is 50mm, and my resistor is 60mm long. so that should work! it'll be really, really ugly, but it should work.
-
-ok crisis mostly averted. i'm going to go add silkscreen to where i experct resistors to be and then i'll finish the bom.
-
-ok silkscreen added and board reexported. that was annoying, and it'll be more annoying in the future, but i don't think i could reasonably add the resistors to the board without spending at least another 5 hours routing.
-
-anyways, BOM:
-
-Part|Quantity|Price/unit|Total price|# pins/unit|# pins total|Note|Link
----|---|---|---|---|---|---|---
-788AS 8x8 LED Matrix|230|$0.35|$82.00|16|3600|not going to count on 0% DoA rate here|https://www.aliexpress.us/item/2251832771187101.html
-74HC595 Shift Register|15|$0.22|$4.00|16|240|2x20 is cheaper than 3x5|https://www.aliexpress.us/item/3256807421796895.html
-TPIC6B595 Shift Register|20|$0.50|$10|16|240|again, not counting on no DoA|https://www.aliexpress.us/item/3256806981485001.html
-IRFU9024NPBF MOSFET|125|$0.40|$40.00|3|360||https://www.aliexpress.us/item/3256808251284284.html
 220Ω Resistor|120|$0.02|$2.80|2|240|2x100 is cheaper than 12x10|https://www.aliexpress.us/item/2251832766343175.html
 2x20 right-angle header female|2|$2.00|$4.00|40|80||https://www.aliexpress.us/item/3256805899201197.html
 2x20 right-angle header male|2|$2.50|$5.00|40|80||https://www.aliexpress.us/item/3256804718416281.html
@@ -389,7 +351,7 @@ That's... a little lower than I hoped. It means I might not be able to get any g
 **total time on July 1st: 5.25 hours**
 
 # July 2nd
-Start time: 3:30 pm
+start time: 3:30 pm
 
 OK with yesterday's success I'm going to solder the rest of the high-side components to expand to a 8x40 display.
 
@@ -429,7 +391,7 @@ updated the code, and it mostly works! there's a few display joints that need re
 
 [another hour later]
 
-got all the pins reflowed! there's some glitchiness with some pixels flickering, not sure why that is yet. my next step is probably to try and optimize the framebuf->pio data step - right now it takes 1700ms(!) and if i can get that to like <50ms then I can do some animations.
+got all the pins reflowed! there's some glitchiness with some pixels flickering, not sure why that is yet. my next step is probably to try and optimize the framebuf->pio data step - right now it takes 1700ms(!) and if i can get that to like <50ms then i can do some animations.
 
 here's what it looks like now:  
 ![image](https://github.com/user-attachments/assets/aad71cca-ffee-4487-9617-ec89d40b00de)
@@ -506,3 +468,78 @@ Going to design the wiring harness that will connect the modules to the controll
 So the row harness will run vertically down the side of the display and will carry 22 wires. It'll connect to the controller with a spare 2x20 header, and will branch into three 1x12 headers for the three rows. The following lines will be spliced so all modules share them: 5V, ROWCLK, CLEAR, LATCH, ROWEN, and 2xGND. Then each connector will also get 5 ROWDAT lines. The column harness will have a similar, but simpler structure. It'll connect to the controller with a 1x8 header, and will branch into three 1x10 headers for the three columns. The following lines will be spliced so all modules share them: 2x5V, COLCLK, CLEAR, LATCH, and GND. The COLDAT line will be daisy-chained along the harness. The COLEN pin will be tied to the other GND pin at the header. 
 
 **total time spent: 30 mins**
+
+# July 26th:
+Start time: 10:45am
+
+Pinout for row connector:
+1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20
+---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---
+ROWEN/GP0|ROWDAT0/GP1|GND|ROWDAT1/GP2|ROWDAT2/GP3|ROWDAT3/GP4|ROWDAT4/GP5|GND|ROWDAT5/GP6|ROWDAT6/GP7|ROWDAT7/GP8|ROWDAT8/GP9|GND|ROWDAT9/GP10|ROWDAT10/GP11|ROWDAT11/GP12|ROWDAT12/GP13|GND|ROWDAT13/GP14|ROWDAT14/GP15
+5V|NC|NC|NC|NC|NC|NC|NC|NC|NC|NC|NC|NC|NC|NC|ROWCLK/GP19|CLEAR/GP18|NC|LATCH/GP17|NC
+
+Pinout for column connector:
+1|2|3|4|5|6|7|8
+---|---|---|---|---|---|---|---
+COLDAT/GP16|LATCH/GP17|GND|CLEAR/GP18|NC|COLCLK/GP20|5V|5V
+
+Other connections:
+- 5V rail to pico VSYS
+- GND rail to pico GND
+- Power jack to power rails
+
+[1:45 later]
+protoboard complete (except for the power jack). I think what's next is just grinding through the rest of the modules.
+
+Just gonna paste the order of operations here:
+- U1-U5
+- U6-U10 (with outputs cut)
+- J1-J6 as needed
+- Q1-Q40
+- DS1-DS25
+- R1-R40
+
+**total time spent: 2 hours**
+
+# July 26th, part 2:
+Start time: 4:30pm
+
+[1.5 hours later]
+All done with the (0, 1) module except for the resistors. After that, I get to do my first driverless module, which will be interesting.
+
+**total time spent: 1.5 hours**
+**total time on July 26th: 3.5 hours**
+
+# July 28th
+Start time: 11am
+
+Time to grind through a bunch of modules. Resistors, then the first driverless module, then the (2, 0) column driver, then another driverless.
+
+[2 hours later]
+
+That was an annoyingly long time soldering resistors. Hopefully the rest will go faster.
+
+[1 hour later]
+
+Driverless module complete. Time for the harness, forr real this time,.
+
+[1.5 hours later]
+
+Column harness wires stripped and soldered, with one connector out of 4 complete. 
+
+**total time spent: 4.5 hours**
+
+# July 29th:
+Start time: 9am
+
+Adding the connectors to the column harness.
+
+[1 hour later]
+
+Column harness complete! Time for the row harness.
+
+[3 hours later]
+
+Row harness nearly complete - just need to solder the 1x12s. Then, _hopefully_, I can just plug in the display modules and it will Just Work.
+
+**total time spent: 4 hours**

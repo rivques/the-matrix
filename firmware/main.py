@@ -120,17 +120,17 @@ def compute_frame(pio_data, buffer):
 
 class Matrix:
     def __init__(self):
-        self.rowdat_pins = [Pin(i, Pin.OUT) for i in range(1)]
-        self.coldat_pin = Pin(15, Pin.OUT)
-        self.latch_pin = Pin(16, Pin.OUT)
+        self.rowdat_pins = [Pin(1, Pin.OUT)]
+        self.coldat_pin = Pin(16, Pin.OUT)
+        self.latch_pin = Pin(17, Pin.OUT)
         self.latch_pin.value(0)
-        self.clear_pin = Pin(17, Pin.OUT) # active low
+        self.clear_pin = Pin(18, Pin.OUT) # active low
         self.clear_pin.value(1)
-        self.rowclk_pin = Pin(18, Pin.OUT)
+        self.rowclk_pin = Pin(19, Pin.OUT)
         self.rowclk_pin.value(0)
-        self.colclk_pin = Pin(19, Pin.OUT)
+        self.colclk_pin = Pin(20, Pin.OUT)
         self.colclk_pin.value(0)
-        self.rowen_pin = PWM(Pin(20, Pin.OUT), freq=10_000_000, duty_u16=0)
+        self.rowen_pin = PWM(Pin(0, Pin.OUT), freq=10_000_000, duty_u16=0)
         self.rowen_pin.duty_u16(65535) # disable output for now
         self.brightness = 0.5
 
