@@ -582,6 +582,8 @@ I'm going to reduce scope to just one module so that I don't burn out and so tha
 
 [1 hour 45 minutes later]
 
+![IMG_2729](https://github.com/user-attachments/assets/78175628-1979-4f3a-8dec-c8b29706902a)
+
 I got it working again! One of the things I forgot about was mixing up latch and clear signals, so once I fixed that I was able to do a bit of programming to allow displaying successive frames and it pretty much just worked.
 
 Next: a last-ditch attempt to make the 4-module version work.
