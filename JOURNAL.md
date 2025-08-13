@@ -543,3 +543,45 @@ Column harness complete! Time for the row harness.
 Row harness nearly complete - just need to solder the 1x12s. Then, _hopefully_, I can just plug in the display modules and it will Just Work.
 
 **total time spent: 4 hours**
+
+# August 9th
+Start time: 11am
+
+Time to solder the last of the row harness.
+
+[1 hour 45 minutes later]
+
+Row harnesses complete. When we come back: moment of truth.
+
+**total time spent: 1 hour 45 minutes**
+
+# August 10th
+Start time: 10:45pm
+
+It's not working, the second column is full on. 
+
+[15 minutes later]
+
+I've switched the COLEN and the COLDATOUT pins on the harness connectors. I'll have to re-solder them and deal with how to tie COLEN low. That'll be really annoying.
+
+**total time spent: 15 minutes**
+
+# August 11th
+Start time: 12:45pm
+
+I've swapped the COLDAT lines to the correct pins on the harness connectors, and tied COLEN to GND with bodge wires on each board. I also fixed a few other bad solder joints on the connectors - I really wish I'd designed this in a way that let me use an off-the-shelf harness to connect things. I'm still having issues. Something is wrong with the communication to the row controllers - the specific row data isn't being received correctly, regardless of clockspeed. rows 0-3 on each module are either all on or all off depending on what the majority of the bitmap is, and row 4 is doing its own random thing.
+
+I'm pretty close to burning out on this project, I've been in the trenches for so long and I haven't gotten any new things working for more than a month - I've just been laying the groundwork needed for scaling. 
+
+**total time spent: 1 hour**
+
+# August 13th
+Start time: 11:45am
+
+I'm going to reduce scope to just one module so that I don't burn out and so that I have something to submit. This should be as easy as just running my existing code.
+
+[1 hour 45 minutes later]
+
+I got it working again! One of the things I forgot about was mixing up latch and clear signals, so once I fixed that I was able to do a bit of programming to allow displaying successive frames and it pretty much just worked.
+
+Next: a last-ditch attempt to make the 4-module version work.

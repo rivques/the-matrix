@@ -7,6 +7,7 @@
     },
     "python.terminal.activateEnvironment": false,
     "micropico.openOnStart": true,
+    "micropico.autoConnect": false,
     "python.analysis.typeshedPaths": [
         "~/.micropico-stubs/included"
     ],

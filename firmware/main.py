@@ -1,6 +1,8 @@
 from machine import Pin, PWM, freq
 import utime
+import time
 import rp2
+import math
 import framebuf
 import gc
 import micropython
@@ -117,6 +119,53 @@ def compute_frame(pio_data, buffer):
         pio_data.extend(words)
         # if col == 0:
         #     postextend = utime.ticks_us()
+
+@micropython.native
+def arrcopy(dest, src, length):
+    for i in range(length):
+        dest[i] = src[i]
+
+def draw_frame(fbuf):
+    fbuf.fill(0)
+    (year, month, mday, hour, minute, second, weekday, yearday) = time.localtime()
+    pi = 3.14159
+
+    # hour ticks
+    for i in range(12):
+        theta = i * pi / 6
+        rmin = 17
+        rmax = 20
+        for r in range(rmin, rmax):
+            x = int(r * math.cos(theta) + 20)
+            y = int(r * math.sin(theta) + 20)
+            fbuf.pixel(x, y, 1)
+    
+    # seconds progress
+    thetamax = (second / 60) * 2 * pi
+    for thetadeg in range(360):
+        theta = thetadeg * pi / 180
+        if theta <= thetamax:
+            x = int(20 * math.cos(theta - pi/2) + 20)
+            y = int(20 * math.sin(theta - pi/2) + 20)
+            fbuf.pixel(x, y, 1)
+    
+    # hours text
+    hour_string = f"{hour:02}"
+    fbuf.text(hour_string[0], 4, 16, 1)
+    fbuf.text(hour_string[1], 11, 16, 1)
+    # colon
+    fbuf.rect(19, 17, 2, 2, 1)
+    fbuf.rect(19, 21, 2, 2, 1)
+    # minutes text
+    minute_string = f"{minute:02}"
+    fbuf.text(minute_string[0], 21, 16, 1)
+    fbuf.text(minute_string[1], 28, 16, 1)
+    # seconds text
+    second_string = f"{second:02}"
+    fbuf.text(second_string, 12, 25, 1)
+    # weekday text
+    weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    fbuf.text(weekdays[weekday], 8, 8, 1)
 
 class Matrix:
     def __init__(self):
@@ -259,7 +308,7 @@ class Matrix:
         self.pio.active(1)
         self.dma.active(1)
     
-    def display_pio_framebuf(self, buffer, pio_freq):
+    def display_pio_framebuf(self, framebuffer, pio_freq):
         # display a frame buffer using PIO
         # the buffer is a linear list of bytes, where each byte represents 8 pixels in a row, and the LSB is the rightmost pixel in an 8-pixel row (MONO_HLSB format).
         # the PIO expects 8 16-bit words per column, where each the LS 15 bits in row i are data for row % 8 == i in that column, and the MS bit is 1 at the first word in the column.
@@ -270,7 +319,7 @@ class Matrix:
         print(f"free memory after garbage collection: {gc.mem_free()//1024} KiB")
 
         pio_data = array('H', [])  # use an array of unsigned shorts for PIO data
-        compute_frame(pio_data, buffer)
+        compute_frame(pio_data, framebuffer)
 
         # start_us = utime.ticks_us()
         # postarray=0
@@ -279,6 +328,36 @@ class Matrix:
         
         # print(f"Col 0 prep times: array={utime.ticks_diff(postarray, start_us)} us, wordgen={utime.ticks_diff(postwordgen, postarray)} us, extend={utime.ticks_diff(postextend, postwordgen)} us, total={utime.ticks_diff(postextend, start_us)} us")
         print(f"Free memory after preparing PIO data: {gc.mem_free()//1024} KiB")
+        gc.collect()  # collect garbage to free up memory
+        print(f"Free memory after garbage collection: {gc.mem_free()//1024} KiB")
+        print(f"Time to prepare PIO data: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
+        print(f"Raw PIO data: {memoryview(pio_data).hex()}")
+        self.pio = rp2.StateMachine(0, pio_disp_routine, out_base=self.rowdat_pins[0], set_base=self.latch_pin, freq=pio_freq)
+        print(f"time to create PIO state machine: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
+        self.dma = rp2.DMA()
+        config = self.dma.pack_ctrl(
+            inc_write=False, # don't increment the write addr, we're writing to the peripheral
+            # ring_size=8, # 16 bytes per column, 8 columns (TODO: increment 3 when more columns are added)
+            # ring_sel=False, # increment the read address
+            treq_sel=0, # dreq on the TX FIFO of the first PIO state machine
+            size=1, # 16-bit transfers
+            bswap=False, # no byte swapping
+            irq_quiet=False, # irq on completion
+        )
+        self.dma.config(read=pio_data, write=self.pio, ctrl=config, count=len(pio_data), trigger=False)
+        self.dma.irq(lambda _: self.dma.config(read=pio_data, write=self.pio, ctrl=config, count=len(pio_data), trigger=True), hard=True)
+        print(f"time to configure DMA: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
+        self.pio.active(1)
+        self.dma.active(1)
+        print(f"time to activate PIO and DMA: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
+    
+    def display_raw_data(self, pio_data, pio_freq):
+        # display a frame buffer using PIO
+        # the buffer is a linear list of bytes, where each byte represents 8 pixels in a row, and the LSB is the rightmost pixel in an 8-pixel row (MONO_HLSB format).
+        # the PIO expects 8 16-bit words per column, where each the LS 15 bits in row i are data for row % 8 == i in that column, and the MS bit is 1 at the first word in the column.
+        
+        start_time = utime.ticks_ms()
+        print(f"free memory before preparing PIO data: {gc.mem_free()//1024} KiB")
         gc.collect()  # collect garbage to free up memory
         print(f"Free memory after garbage collection: {gc.mem_free()//1024} KiB")
         print(f"Time to prepare PIO data: {utime.ticks_diff(utime.ticks_ms(), start_time)} ms")
@@ -310,6 +389,7 @@ buf_raw = bytearray(120 * 120 // 8) # 120x120 pixels, 8 pixels per byte
 fbuf = framebuf.FrameBuffer(buf_raw, 120, 120, framebuf.MONO_HLSB)
 
 fbuf.fill(1)  # Clear the frame buffer
+#fbuf.fill_rect(0, 0, 8, 8, 1)
 fbuf.text("12345", 0, 0, 0)
 fbuf.text("67890", 0, 8, 0)
 fbuf.text("ABCDE", 0, 16, 0)
@@ -328,15 +408,39 @@ for y in range(40):
 matrix.rowen_pin.duty_u16(32000)
 
 pio_freq = 400_000  # PIO frequency
-matrix.display_pio_framebuf(buf_raw, pio_freq)
+pio_data_pre = array('H', [])
+compute_frame(pio_data_pre, buf_raw)
+pio_data = array('H', pio_data_pre)
+print(f"{len(pio_data_pre)=}, {len(pio_data)=}")
+matrix.display_raw_data(pio_data, pio_freq)
 try:
     while True:
-        utime.sleep_ms(500)
+        frame_start_time = utime.ticks_ms()
+        utime.sleep_ms(300)
         print(f"{matrix.pio.tx_fifo()} bytes on the TX FIFO")
         print(f"State machine active: {matrix.pio.active()}")
         print(f"DMA active: {matrix.dma.active()}")
         print(f"Processor frequency: {freq()} Hz")
         print(f"PIO frequency: {pio_freq} Hz")
+
+        
+        draw_frame(fbuf)
+        pio_data_pre = array('H', [])
+        compute_frame(pio_data_pre, buf_raw)
+        print(f"Took {utime.ticks_diff(utime.ticks_ms(), frame_start_time)} ms to compute new frame")
+        # copy pio data pre into pio data
+        # dma = rp2.DMA()
+        # config = dma.pack_ctrl()
+        # dma.config(read=pio_data_pre, write=pio_data, ctrl=config, count=len(pio_data_pre)//4, trigger=True) 
+        # print("DMA configured.")
+        # while dma.active():
+        #     utime.sleep_ms(10)
+        # print("DMA completed.")
+        while utime.ticks_diff(utime.ticks_ms(), frame_start_time) < 1000:
+            pass
+        arrcopy(pio_data, pio_data_pre, len(pio_data_pre))
+        # print("Copied PIO data to display buffer")
+
 
 except:
     matrix.dma.active(0)
