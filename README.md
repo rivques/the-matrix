@@ -1,5 +1,7 @@
 # the-matrix
 
+![IMG_2729](https://github.com/user-attachments/assets/a67bbee2-225f-4622-85fb-1189d5387466)
+
 This is a large (theoretically 1ftx1ft) LED matrix display with a resolution of up to 120x120 monochrome pixels. My intended use for it is to act as an "ultra-clock," showing not just the time but also other useful information like weather, sports scores, maybe news, etc. However, it should be said that this is designed to be a generic module, and not destined for any specific project - this should be something I can pull off my shelf, send the correct control signals to, and get a display from.
 
 I've had the ultra-clock idea for a while, and I originally wanted to use flip dots for the display, but they turned out to be expensive and hard to find, so I switched to using LED matrices instead.
