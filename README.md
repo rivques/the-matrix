@@ -1,10 +1,12 @@
 # the-matrix
 
-This is a large (1ftx1ft) LED matrix display with a resolution of 120x120 monochrome pixels. My intended use for it is to act as an "ultra-clock," showing not just the time but also other useful information like weather, sports scores, maybe news, etc. However, it should be said that this is designed to be a generic module, and not destined for any specific project - this should be something I can pull off my shelf, send the correct control signals to, and get a display from.
+This is a large (theoretically 1ftx1ft) LED matrix display with a resolution of up to 120x120 monochrome pixels. My intended use for it is to act as an "ultra-clock," showing not just the time but also other useful information like weather, sports scores, maybe news, etc. However, it should be said that this is designed to be a generic module, and not destined for any specific project - this should be something I can pull off my shelf, send the correct control signals to, and get a display from.
 
 I've had the ultra-clock idea for a while, and I originally wanted to use flip dots for the display, but they turned out to be expensive and hard to find, so I switched to using LED matrices instead.
 
 The full display is constructed of 9 display modules, each of which itself contains 25 8x8 LED matrices. Each module also contains positions for the shift registers and MOSFETs that make up the control circuitry.
+
+However, I have not yet built the full display - scaling up from 1 to 9 modules turned out to be _much_ harder than expected. I have 4 modules fully built, plus harnesses and a control board - I just haven't been able to make them play nice, despite spending more than 20 hours on scaling and troubleshooting. I still hope to realize the full vision at some point, but I'm pretty burnt out on this for the short term.
 
 The display is not without its quirks. Most of these stem from either the geometric realities of trying to fit everything onto the board or a software-compensatable routing mistake that would take hours of work to fix in hardware. The biggest of these is that the current-limiting resistors aren't actually on the board but instead fly above the back of it. Also, the bottom and top row of matrices on each module are rotated 90 degrees, and every other module has pairs of rows and columns swapped (e.g. col1 connects to col2, col2->col1, col3->col4, etc.) This is something I can fix in software.
 

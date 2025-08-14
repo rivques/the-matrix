@@ -171,11 +171,11 @@ class Matrix:
     def __init__(self):
         self.rowdat_pins = [Pin(1, Pin.OUT)]
         self.coldat_pin = Pin(16, Pin.OUT)
-        self.latch_pin = Pin(17, Pin.OUT)
+        self.latch_pin = Pin(17, Pin.OUT) # NOTE: The pin labels for ROWLATCH and ROWCLK are the wrong way around. Because of this, this pin should connect to the wires labeled ROWCLK and COLLATCH.
         self.latch_pin.value(0)
         self.clear_pin = Pin(18, Pin.OUT) # active low
         self.clear_pin.value(1)
-        self.rowclk_pin = Pin(19, Pin.OUT)
+        self.rowclk_pin = Pin(19, Pin.OUT) # NOTE: Because of the above swap, this pin should connect to the wire labeled ROWLATCH.
         self.rowclk_pin.value(0)
         self.colclk_pin = Pin(20, Pin.OUT)
         self.colclk_pin.value(0)

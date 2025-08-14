@@ -584,6 +584,20 @@ I'm going to reduce scope to just one module so that I don't burn out and so tha
 
 ![IMG_2729](https://github.com/user-attachments/assets/78175628-1979-4f3a-8dec-c8b29706902a)
 
-I got it working again! One of the things I forgot about was mixing up latch and clear signals, so once I fixed that I was able to do a bit of programming to allow displaying successive frames and it pretty much just worked.
+I got it working again! One of the things I forgot about was mixing up latch and clock signals, so once I fixed that I was able to do a bit of programming to allow displaying successive frames and it pretty much just worked.
 
 Next: a last-ditch attempt to make the 4-module version work.
+
+**total time spent: 1 hour 45 minutes**
+
+# August 13th, part 2
+Start time: 7:15pm
+
+Ok, perhaps ill-advisedly, I'm going to try to scale back up to 2x2. But I think I know what the issue was this time: ROWCLK and ROWLATCH being swapped. To fix this, I'm re-solder the protoboard to swap that back.
+
+[30 minutes later]
+
+All boards light, but the 3 off-main ones definetly are not healthy. There are soooo many things that could have gone wrong there, and I don't think I have time to figure out which one.
+
+**total time spent: 30 minutes**
+**total time on August 13th: 2 hours 15 minutes**
