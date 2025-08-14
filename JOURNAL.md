@@ -599,5 +599,8 @@ Ok, perhaps ill-advisedly, I'm going to try to scale back up to 2x2. But I think
 
 All boards light, but the 3 off-main ones definetly are not healthy. There are soooo many things that could have gone wrong there, and I don't think I have time to figure out which one.
 
+![IMG_2731](https://github.com/user-attachments/assets/fb361b0a-e3c6-42a7-80f8-56629837802d)
+
+
 **total time spent: 30 minutes**
 **total time on August 13th: 2 hours 15 minutes**
